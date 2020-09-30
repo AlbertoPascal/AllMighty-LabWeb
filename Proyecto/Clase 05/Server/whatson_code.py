@@ -22,8 +22,8 @@ request_data = {
             #Solo copiar hasta antes de v2/assistants
             "assistant_url": "https://api.us-south.assistant.watson.cloud.ibm.com/instances/83f871e3-becc-4fc1-be4b-f8ef3d87ae0c",
             "assistant_version": "2019-02-28",
-            "assistant_id": "42695004-7417-46b5-8b04-64fc7272719f",
-            "session_id":        '0b978046-1ba9-45f0-a58c-8a9c2b5cb5c5'
+            "assistant_id": "851e8e2a-9417-4cb8-994b-47e273fd6249",
+            "session_id":        '49fbcad3-d85b-4655-8e8c-a344df9d64db'
 
         }
     
