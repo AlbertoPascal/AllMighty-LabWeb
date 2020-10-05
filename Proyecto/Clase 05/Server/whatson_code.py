@@ -16,6 +16,13 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from flask import jsonify
 from flask_api import status
 
+#MongoDB management
+import sys
+import pymongo
+
+uri = r"mongodb+srv://user_web:LabWeb2020@webapp.7rzpk.mongodb.net/AllMightyBudget?retryWrites=true&w=majority"
+db = None
+
 
 request_data = {
             "assistant_api_key": "dgQodFXmxd5B5TeRNripxUSNGJ0SGFD95HVJlO9CRj9y",
@@ -26,7 +33,55 @@ request_data = {
             "session_id":        '49fbcad3-d85b-4655-8e8c-a344df9d64db'
 
         }
+def connect_to_mongo(uri):
+    #global db, uri
+    client = pymongo.MongoClient(uri) 
+    print(client)
+    db = client.get_default_database()
+    #Allmightiness = db[collection]
+    #print("------------------")
+    #print(Allmightiness)
     
+    #cursor = Allmightiness.find({"currency": "MXN"})
+    
+    #for value in cursor:
+    #    print(value)
+    return client, db
+def query_mongo_intent(intent):
+    client, db = connect_to_mongo(uri)
+    query = {'intent': intent}
+    found_values = query_mongo_request(db, collection, query)
+    return found_values
+def query_mongo_request(db, collection, query):
+    values = []
+    collection_data = db[collection]
+    
+    cursor = collection_data.find(query)
+    for val in cursor:
+        values.append(val)
+    return values
+def general_mongo_query(collection, query):
+    client, db = connect_to_mongo(uri)
+    found_values = query_mongo_request(db, collection, query )
+    return found_values
+
+def insert_mongo(collection, values_to_insert):
+    client, db = connect_to_mongo(uri)
+    collection_data = db[collection]
+    if type(values_to_insert) == type(list()):
+        #tengo más de un valor por insertar. 
+        for value in values_to_insert:
+            collection_data.insert_one(value)
+            print("Inserted value :", value, " to   collection ", collection_data.name)
+    else:
+        collection_data.insert_one(values_to_insert)
+        print("Inserted value :", values_to_insert, " to collection ", collection_data.name)
+def insert_user_msg(msg):
+    resp, intent = whatson_send_bot_response(msg)
+    value = {"msg" : msg, "intent": intent, "response" : resp}
+    insert_mongo('user_messages', value)
+    print("Message inserted into user_messages collection")
+
 def watson_create_session():
 
 
@@ -131,3 +186,6 @@ def whatson_send_bot_response(msg):
     #print("My intent name is: ", response["response"]["output"]["intents"][0]["intent"])
     #print("My answer was : ", response["response"]["output"]["generic"][0]["text"])
     return response["response"]["output"]["generic"][0]["text"], response["response"]["output"]["intents"][0]["intent"]
+
+
+#connect_to_mongo()
