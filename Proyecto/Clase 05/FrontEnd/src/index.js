@@ -3,10 +3,18 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { useHistory } from "react-router-dom";
+import { Auth0Provider } from "@auth0/auth0-react";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App color={"rosa"}/>
+    <Auth0Provider
+     domain="a01021323.auth0.com"
+     clientId="dDYeTl9U1ZmOf5gkRaY6zDFj2iIN9Okj"
+     redirectUri={window.location.origin}
+    >
+      <App color={"rosa"}/>
+    </Auth0Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );
