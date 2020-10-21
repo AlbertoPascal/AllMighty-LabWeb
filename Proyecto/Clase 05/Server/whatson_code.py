@@ -20,9 +20,10 @@ from flask_api import status
 import sys
 import pymongo
 
-uri = r"mongodb+srv://user_web:LabWeb2020@webapp.7rzpk.mongodb.net/AllMightyBudget?retryWrites=true&w=majority"
+uri = r"mongodb+srv://user_web:LabWeb2020@webapp.7rzpk.mongodb.net/AllMightyHealth?retryWrites=true&w=majority"
 db = None
 
+buy_data = {}
 
 request_data = {
             "assistant_api_key": "dgQodFXmxd5B5TeRNripxUSNGJ0SGFD95HVJlO9CRj9y",
@@ -47,10 +48,14 @@ def connect_to_mongo(uri):
     #for value in cursor:
     #    print(value)
     return client, db
-def query_mongo_intent(intent):
+#No buscar solo el intent sino también los demás: entity, type, etc...
+def query_mongo_response(collection, intent, product, has_quantity, has_type):
     client, db = connect_to_mongo(uri)
-    query = {'intent': intent}
+    query = {'intent': intent, 'product': product, 'has_quantity': has_quantity, 'has_type': has_type}
     found_values = query_mongo_request(db, collection, query)
+    print("-----------------------------------------")
+    print("My query would be: ", query)
+    print("-----------------------------------------")
     return found_values
 def query_mongo_request(db, collection, query):
     values = []
@@ -76,12 +81,64 @@ def insert_mongo(collection, values_to_insert):
     else:
         collection_data.insert_one(values_to_insert)
         print("Inserted value :", values_to_insert, " to collection ", collection_data.name)
-def insert_user_msg(msg):
-    resp, intent = whatson_send_bot_response(msg)
-    value = {"msg" : msg, "intent": intent, "response" : resp}
+        
+def extract_watson_info(entities):
+    has_quantity = False
+    has_type = False
+    product = None
+    
+    for entity in entities:
+        print("first entity is: ", entity)
+        
+        if entity.get("entity") == 'sys-number':
+            try:
+                buy_data["quantity"] = int(entity["value"])
+                has_quantity = (int(entity["value"])>0)
+            except TypeError:
+                print("Not a number")            
+        elif entity.get("entity") in ('Tipo_termometro', 'Tipos_desinfectante', 'Tipos_mascaras', 'Tipos_pruebas'):
+            buy_data["type"] = entity["value"]
+            has_type = True
+        else:
+            product = entity.get("value")
+    
+    #results = {'q' : has_quantity, 't': has_type, 'p': product}
+    #print("Results were ", results)
+    return has_quantity, has_type, product
+
+#This method will insert a user's message to relate it to a query and retrieve an answer. 
+def insert_user_msg(intent, msg, usr):
+    
+    value = {"msg" : msg, "intent": intent, "user" : usr}
     insert_mongo('user_messages', value)
     print("Message inserted into user_messages collection")
 
+#This function will be called from jsx to retrieve all data. 
+def retrieve_mongo_response(msg, usr):
+    #first we extract info from watson
+    intent, entities = whatson_send_bot_response(msg)
+    #then we insert the user message in MongoDB
+    insert_user_msg(intent, msg, usr)
+    #We interpret the message info
+    has_quantity, has_type, product = extract_watson_info(entities)
+    #query the intent and parameters on mongodb
+    response = query_mongo_response("respuestas",intent, product, has_quantity, has_type)
+    
+    print("----------------------------------")
+    print(response)
+    print("---------------------------------")
+    for msg in response[0]["response"]:
+        if '{quantity}' in msg["message"]:
+            print("--- my message needs to replace quantity" )
+            msg["message"] = msg["message"].replace('{quantity}', str(buy_data["quantity"]))
+            print(msg["message"])
+        if '{type}' in msg["message"]:
+            msg["message"] = msg["message"].replace('{type}', str(buy_data["type"]))
+        if '{product}' in msg["message"]:
+            msg["message"] = msg["message"].replace('{product}', str(product))
+        
+    return response[0].get('response')
+    
 def watson_create_session():
 
 
@@ -185,7 +242,8 @@ def whatson_send_bot_response(msg):
     response = watson_response(msg)
     #print("My intent name is: ", response["response"]["output"]["intents"][0]["intent"])
     #print("My answer was : ", response["response"]["output"]["generic"][0]["text"])
-    return response["response"]["output"]["generic"][0]["text"], response["response"]["output"]["intents"][0]["intent"]
+    print(response)
+    return response["response"]["output"]["intents"][0]["intent"], response["response"]["output"]["entities"]
 
 
 #connect_to_mongo()
