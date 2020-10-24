@@ -108,47 +108,6 @@ class Review extends React.Component {
           </div>
     );
     
-    
-    /*if (this.to_render.msgs.length > 0)
-    {
-      
-      if (curr_type == "Carousel")
-      {
-        return (
-            <Carousel width = "100%">{ReactHtmlParser(curr_msg)}</Carousel>
-          );
-      }
-      else
-      {
-        return (
-          <div style={{ width: '100%' }}>
-          <div class = "container " width = "100%">{ ReactHtmlParser(curr_msg)}</div>
-          </div>
-        );
-      }
-    }
-
-    */
-    
-    //var msg_td =  this.state.msg;
-    //var inte = this.state.inte;
-    //msg_td = msg_td.replace('<carousel>', '<Carousel>')
-    //msg_td = msg_td.replace('</carousel>', '</Carousel>')
-    //var code = {__html: msg_td}
-    //const slides = Array.from(document.getElementById("slides").children)
-    /*if (inte == 'Compras')
-    {
-      console.log("Hasta aquí todo bien");
-      return (
-       <Carousel width = "100%">{ReactHtmlParser(msg_td)}</Carousel>
-      );
-    }
-    return (
-      <div style={{ width: '100%' }}>
-        <div class = "container " width = "100%">{ ReactHtmlParser(msg_td)}</div>
-      </div>
-    );*/
-    
   }
   
 }
