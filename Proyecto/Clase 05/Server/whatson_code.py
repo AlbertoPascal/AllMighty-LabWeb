@@ -51,6 +51,8 @@ def connect_to_mongo(uri):
 #No buscar solo el intent sino también los demás: entity, type, etc...
 def query_mongo_response(collection, intent, product, has_quantity, has_type):
     client, db = connect_to_mongo(uri)
+    if product == None:
+        product = "no_product"
     query = {'intent': intent, 'product': product, 'has_quantity': has_quantity, 'has_type': has_type}
     found_values = query_mongo_request(db, collection, query)
     print("-----------------------------------------")
@@ -90,7 +92,7 @@ def extract_watson_info(entities):
     for entity in entities:
         print("first entity is: ", entity)
         
-        if entity.get("entity") == 'sys-number':
+        if entity.get("entity") == 'sys-number' and not has_quantity:
             try:
                 buy_data["quantity"] = int(entity["value"])
                 has_quantity = (int(entity["value"])>0)
@@ -99,7 +101,7 @@ def extract_watson_info(entities):
         elif entity.get("entity") in ('Tipo_termometro', 'Tipos_desinfectante', 'Tipos_mascaras', 'Tipos_pruebas'):
             buy_data["type"] = entity["value"]
             has_type = True
-        else:
+        elif entity.get("entity") != "sys-number":
             product = entity.get("value")
     
     #results = {'q' : has_quantity, 't': has_type, 'p': product}
@@ -132,11 +134,13 @@ def retrieve_mongo_response(msg, usr):
             print("--- my message needs to replace quantity" )
             msg["message"] = msg["message"].replace('{quantity}', str(buy_data["quantity"]))
             print(msg["message"])
+            buy_data["quantity"] = ""
         if '{type}' in msg["message"]:
             msg["message"] = msg["message"].replace('{type}', str(buy_data["type"]))
+            buy_data["type"] = ""
         if '{product}' in msg["message"]:
             msg["message"] = msg["message"].replace('{product}', str(product))
-        
+            product = ""
     return response[0].get('response')
     
 def watson_create_session():
