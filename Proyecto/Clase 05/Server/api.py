@@ -30,9 +30,13 @@ class GET_MESSAGE(Resource):
     def post(self):
         print(request.json)
         msg = request.json["message"]
-        resp, intent = whatson_code.whatson_send_bot_response(msg)
-        print("msg: ", resp, " intent: ", intent)
-        return jsonify( msg = resp, inte = intent)
+        usr = request.json["user"]
+        responses = whatson_code.retrieve_mongo_response(msg, usr)
+        for element in responses:
+            print("msg: ", element)
+        print("-----------------------")
+        print(responses)
+        return jsonify( response = responses)
 
 class GET_INTENT(Resource):
     def post(self):
