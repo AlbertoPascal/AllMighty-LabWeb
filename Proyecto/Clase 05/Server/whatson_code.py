@@ -34,6 +34,7 @@ request_data = {
             "session_id":        '49fbcad3-d85b-4655-8e8c-a344df9d64db'
 
         }
+def 
 def connect_to_mongo(uri):
     #global db, uri
     client = pymongo.MongoClient(uri) 
@@ -115,6 +116,15 @@ def insert_user_msg(intent, msg, usr):
     insert_mongo('user_messages', value)
     print("Message inserted into user_messages collection")
 
+def retrieve_mongo_whatsapp_response(msg, usr):
+    #first we extract info from whatson according to the message that was sent
+    intent, entities = whatson_send_bot_response(msg)
+    #then we insert eh user message in mongoDB:
+    insert_user_msg(intent, msg, usr)
+    #We interpret the messge info
+    has_quantity, has_type, product = extract_watson_info(entities)
+    #query for mongo response
+     response = query_mongo_response("respuestasWhats",intent, product, has_quantity, has_type)
 #This function will be called from jsx to retrieve all data. 
 def retrieve_mongo_response(msg, usr):
     #first we extract info from watson
