@@ -7,12 +7,15 @@ Created on Tue Oct 13 21:00:13 2020
 
 # Download the helper library from https://www.twilio.com/docs/python/install
 from twilio.rest import Client
+from dotenv import load_dotenv
+import os
 
 
 # Your Account Sid and Auth Token from twilio.com/console
 # DANGER! This is insecure. See http://twil.io/secure
-account_sid = 'ACbaec6b6ed7aa88025cdfcf672a697138'
-auth_token = '93b2ed65745272897fd68716691e5ebe'
+load_dotenv()
+account_sid = os.getenv('ACCOUNT_SID')
+auth_token = os.getenv('AUTH_TOKEN')
 client = Client(account_sid, auth_token)
 
 def respond_in_whatsapp(message, number):
@@ -20,7 +23,7 @@ def respond_in_whatsapp(message, number):
     message = client.messages.create(
                                   body=message,
                                   from_='whatsapp:+14155238886',
-                                  to='whatsapp:' + str(number)
+                                  to= str(number)
                               )
     
     print(message.sid)

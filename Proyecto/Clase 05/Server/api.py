@@ -16,6 +16,7 @@ from ibm_watson import AssistantV2, ApiException
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from flask import jsonify
 import whatson_code
+import whatsapp
 
 load_dotenv()
 
@@ -52,6 +53,7 @@ class WHATSAPP_MESSAGE(Resource):
         user = request.form['From']
         print('Message: ', message)
         print('User: ', user)
+        whatsapp.respond_in_whatsapp(message, user)
         return jsonify(test_response = "test")
     
     
