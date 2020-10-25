@@ -45,8 +45,19 @@ class GET_INTENT(Resource):
         resp,intent = whatson_code.whatson_send_bot_response(msg)
         return jsonify(este_es_el_intent = intent)
     
+class WHATSAPP_MESSAGE(Resource):
+    def post(self):
+        print("contenido: ", request.form)
+        message = request.form['Body']
+        user = request.form['From']
+        print('Message: ', message)
+        print('User: ', user)
+        return jsonify(test_response = "test")
+    
+    
 api.add_resource(GET_MESSAGE, '/getMessage')  # Route_1
 api.add_resource(GET_INTENT, '/getIntent')
+api.add_resource(WHATSAPP_MESSAGE, '/whatsapp_response')
 
 if __name__ == '__main__':
     app.run(port='5002')
