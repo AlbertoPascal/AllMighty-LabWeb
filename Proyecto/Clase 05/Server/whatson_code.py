@@ -160,10 +160,12 @@ def retrieve_mongo_whatsapp_response(msg, usr):
 def format_whatsapp_response(response, usr):
     #the idea here is to return an image, pdf or stuff depending on what the whatsapp answer needs to be
     for element in response:
+        print(element)
         if element["obj_type"] == 'Carousel':
             #Send PDF. 
             pass
         elif element["obj_type"] == 'Text':
+            print("Message to be sent: ", element["message"])
             whatsapp.respond_in_whatsapp(element["message"],usr)
 #This function will be called from jsx to retrieve all data. 
 def retrieve_mongo_response(msg, usr):

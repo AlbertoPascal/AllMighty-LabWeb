@@ -19,7 +19,8 @@ auth_token = os.getenv('AUTH_TOKEN')
 client = Client(account_sid, auth_token)
 
 def respond_in_whatsapp(message, number):
-    
+    print("connection data: ", account_sid, auth_token) 
+    print('ENTERING TO SEND WHATSAPP MESSAGE ', client)
     message = client.messages.create(
                                   body=message,
                                   from_='whatsapp:+14155238886',
