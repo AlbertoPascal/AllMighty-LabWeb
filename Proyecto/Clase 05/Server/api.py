@@ -53,9 +53,9 @@ class WHATSAPP_MESSAGE(Resource):
         user = request.form['From']
         print('Message: ', message)
         print('User: ', user)
-        whatsapp.respond_in_whatsapp(message, user)
+        #whatsapp.respond_in_whatsapp(message, user)
         print("Sending message....")
-        #whatson_code.retrieve_mongo_whatsapp_response(message, user)
+        whatson_code.retrieve_mongo_whatsapp_response(message, user)
         
         return jsonify(test_response = "test")
     
