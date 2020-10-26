@@ -160,7 +160,7 @@ def retrieve_mongo_whatsapp_response(msg, usr):
         if msg != None and msg != " " and msg != "":
             whatsapp.respond_in_whatsapp(msg,usr)
         else:
-            msg = "¡Wow! Yo no todavía no aprendo cómo mandar eso :("
+            msg = "¡Wow! Yo todavía no aprendo cómo mandar eso :("
             whatsapp.respond_in_whatsapp(msg, usr)
     #return response[0].get('response')
 def format_whatsapp_response(response, usr):
