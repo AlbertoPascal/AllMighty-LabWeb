@@ -128,35 +128,45 @@ def insert_user_msg(intent, msg, usr):
 
 def retrieve_mongo_whatsapp_response(msg, usr):
     print("Starting to fetch whatsapp response")
-    #first we extract info from whatson according to the message that was sent
-    intent, entities = whatson_send_bot_response(msg)
-    #then we insert eh user message in mongoDB:
-    insert_user_msg(intent, msg, usr)
-    #We interpret the messge info
-    has_quantity, has_type, product = extract_watson_info(entities)
-    #query for mongo response
-    response = query_mongo_response("respuestasWhatsapp",intent, product, has_quantity, has_type)
+    try:
+        #first we extract info from whatson according to the message that was sent
+        intent, entities = whatson_send_bot_response(msg)
+        #then we insert eh user message in mongoDB:
+        insert_user_msg(intent, msg, usr)
+        #We interpret the messge info
+        has_quantity, has_type, product = extract_watson_info(entities)
+        #query for mongo response
+
     
-    print("----------------------------------")
-    print(response)
-    print("---------------------------------")
-    for msg in response[0]["response"]:
-        if '{quantity}' in msg["message"]:
-            print("--- my message needs to replace quantity" )
-            msg["message"] = msg["message"].replace('{quantity}', str(buy_data["quantity"]))
-            print(msg["message"])
-            buy_data["quantity"] = ""
-        if '{type}' in msg["message"]:
-            msg["message"] = msg["message"].replace('{type}', str(buy_data["type"]))
-            buy_data["type"] = ""
-        if '{product}' in msg["message"]:
-            msg["message"] = msg["message"].replace('{product}', str(product))
-            product = ""
-    format_whatsapp_response(response[0].get('response'),usr)
-    
+        response = query_mongo_response("respuestasWhatsapp",intent, product, has_quantity, has_type)
+        
+        print("----------------------------------")
+        print(response)
+        print("---------------------------------")
+        for msg in response[0]["response"]:
+            if '{quantity}' in msg["message"]:
+                print("--- my message needs to replace quantity" )
+                msg["message"] = msg["message"].replace('{quantity}', str(buy_data["quantity"]))
+                print(msg["message"])
+                buy_data["quantity"] = ""
+            if '{type}' in msg["message"]:
+                msg["message"] = msg["message"].replace('{type}', str(buy_data["type"]))
+                buy_data["type"] = ""
+            if '{product}' in msg["message"]:
+                msg["message"] = msg["message"].replace('{product}', str(product))
+                product = ""
+        format_whatsapp_response(response[0].get('response'),usr)
+    except ValueError:
+        if msg != None and msg != " " and msg != "":
+            whatsapp.respond_in_whatsapp(msg,usr)
+        else:
+            msg = "¡Wow! Yo no todavía no aprendo cómo mandar eso :("
+            whatsapp.respond_in_whatsapp(msg, usr)
     #return response[0].get('response')
 def format_whatsapp_response(response, usr):
     #the idea here is to return an image, pdf or stuff depending on what the whatsapp answer needs to be
+    print("----------------------------------------------")
+    print("Starting to format whatsapp response")
     for element in response:
         print(element)
         if element["obj_type"] == 'Carousel':
@@ -297,4 +307,7 @@ def whatson_send_bot_response(msg):
     #print("My intent name is: ", response["response"]["output"]["intents"][0]["intent"])
     #print("My answer was : ", response["response"]["output"]["generic"][0]["text"])
     print(response)
-    return response["response"]["output"]["intents"][0]["intent"], response["response"]["output"]["entities"]
+    try:
+        return response["response"]["output"]["intents"][0]["intent"], response["response"]["output"]["entities"]
+    except IndexError:
+        return msg
