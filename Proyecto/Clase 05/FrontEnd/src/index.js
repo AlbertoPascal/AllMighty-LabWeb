@@ -1,50 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { useHistory } from "react-router-dom";
+import { Auth0Provider } from "@auth0/auth0-react";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { useHistory } from "react-router-dom";
-import { Auth0Provider } from "@auth0/auth0-react";
-import {useAuth0} from '@auth0/auth0-react'
-import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+import CheckLogin from "./Components/CheckLogin"
 
-const CheckLogin = () => {
-  const {user, isAuthenticated, isLoading} = useAuth0();
-  
-  if(isLoading)
-    return "";
-  
-  if(isAuthenticated){
-    return (
-      <App color={"rosa"}/>
-    )
-  }
-  else{
-    return(
-      <LoginButton/>
-    )
-  }
 
-}
-
-const LoginButton = () =>{
-  
-  const {loginWithRedirect} = useAuth0();
-
-  return (
-
-    <div class = "text-center">
-      <br></br>
-      <h1>Inicia sesión para ingresar a la página</h1>
-      <br></br>
-      <button type="button" class="btn btn-primary btn-lg"  onClick={ () => loginWithRedirect()}>
-        Log In
-      </button>
-    </div>
-  )
-}
-
+//With the "CheckLogin" component, the app checks ig the user has authenticated yet and, if not, it asks them to login with auth0
 ReactDOM.render(
   <React.StrictMode>
     <Auth0Provider

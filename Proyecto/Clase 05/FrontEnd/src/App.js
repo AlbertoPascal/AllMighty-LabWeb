@@ -5,11 +5,13 @@ import NavBar from "./Components/NavBar";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Widget, addResponseMessage } from "react-chat-widget";
 import "react-chat-widget/lib/styles.css";
-import Home from "./Pages/Home";
-import LandingPage from "./Pages/LandingPage";
-import User from "./Pages/User";
 import ChatBot from 'react-simple-chatbot';
 import SimpleChatBox from './Components/SimpleChatBox';
+
+import LandingPage from "./Pages/LandingPage";
+import Home from "./Pages/Home";
+import User from "./Pages/User";
+import Profile from "./Pages/Profile";
 
 
 const handleNewUserMessage = (newMessage) => {
@@ -34,13 +36,10 @@ export default function App() {
       <NavBar />
       <Switch>
         <Route exact path="/">
-          <LandingPage />
-        </Route>
-        <Route path="/home">
           <Home />
         </Route>
-        <Route path="/user">
-          <User />
+        <Route path="/profile">
+          <Profile />
         </Route>
       </Switch>
 
