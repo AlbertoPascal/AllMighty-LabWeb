@@ -19,6 +19,7 @@ from flask_api import status
 #MongoDB management
 import sys
 import pymongo
+import whatsapp
 
 uri = r"mongodb+srv://user_web:LabWeb2020@webapp.7rzpk.mongodb.net/AllMightyHealth?retryWrites=true&w=majority"
 db = None
@@ -34,7 +35,18 @@ request_data = {
             "session_id":        '49fbcad3-d85b-4655-8e8c-a344df9d64db'
 
         }
-def 
+def copy_collection(collection):
+    global uri
+    client = pymongo.MongoClient(uri)
+    db = client.get_default_database()
+    col1 = db['respuestas']
+    col2 = db['respuestasWhatsapp']
+    for a in col1.find():
+        try:
+            col2.insert(a)
+            print(a)
+        except:
+            print('did not copy')
 def connect_to_mongo(uri):
     #global db, uri
     client = pymongo.MongoClient(uri) 
@@ -117,6 +129,7 @@ def insert_user_msg(intent, msg, usr):
     print("Message inserted into user_messages collection")
 
 def retrieve_mongo_whatsapp_response(msg, usr):
+    print("Starting to fetch whatsapp response")
     #first we extract info from whatson according to the message that was sent
     intent, entities = whatson_send_bot_response(msg)
     #then we insert eh user message in mongoDB:
@@ -124,7 +137,36 @@ def retrieve_mongo_whatsapp_response(msg, usr):
     #We interpret the messge info
     has_quantity, has_type, product = extract_watson_info(entities)
     #query for mongo response
-     response = query_mongo_response("respuestasWhats",intent, product, has_quantity, has_type)
+    response = query_mongo_response("respuestasWhatsapp",intent, product, has_quantity, has_type)
+    
+    print("----------------------------------")
+    print(response)
+    print("---------------------------------")
+    for msg in response[0]["response"]:
+        if '{quantity}' in msg["message"]:
+            print("--- my message needs to replace quantity" )
+            msg["message"] = msg["message"].replace('{quantity}', str(buy_data["quantity"]))
+            print(msg["message"])
+            buy_data["quantity"] = ""
+        if '{type}' in msg["message"]:
+            msg["message"] = msg["message"].replace('{type}', str(buy_data["type"]))
+            buy_data["type"] = ""
+        if '{product}' in msg["message"]:
+            msg["message"] = msg["message"].replace('{product}', str(product))
+            product = ""
+    format_whatsapp_response(response[0].get('response'),usr)
+    
+    #return response[0].get('response')
+def format_whatsapp_response(response, usr):
+    #the idea here is to return an image, pdf or stuff depending on what the whatsapp answer needs to be
+    for element in response:
+        print(element)
+        if element["obj_type"] == 'Carousel':
+            #Send PDF. 
+            pass
+        elif element["obj_type"] == 'Text':
+            print("Message to be sent: ", element["message"])
+            whatsapp.respond_in_whatsapp(element["message"],usr)
 #This function will be called from jsx to retrieve all data. 
 def retrieve_mongo_response(msg, usr):
     #first we extract info from watson
