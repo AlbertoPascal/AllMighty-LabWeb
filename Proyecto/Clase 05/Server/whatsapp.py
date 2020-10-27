@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Oct 13 21:00:13 2020
-
 @author: beto_
 """
 
