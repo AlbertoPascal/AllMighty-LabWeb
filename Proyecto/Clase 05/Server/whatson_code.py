@@ -143,6 +143,7 @@ def retrieve_mongo_whatsapp_response(msg, usr):
     if bool(product):
         print("Replacing my product data for: ", product, " because value was ", bool(product))
         prev_intent_data["product"] = product
+    
     response = query_mongo_response("respuestasWhatsapp",prev_intent_data["intent"], prev_intent_data["product"], has_quantity, has_type)
     
     print("----------------------------------")
