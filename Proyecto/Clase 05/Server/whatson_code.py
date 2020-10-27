@@ -23,7 +23,7 @@ import whatsapp
 
 uri = r"mongodb+srv://user_web:LabWeb2020@webapp.7rzpk.mongodb.net/AllMightyHealth?retryWrites=true&w=majority"
 db = None
-
+prev_intent_data = {}
 buy_data = {}
 
 request_data = {
@@ -132,12 +132,18 @@ def retrieve_mongo_whatsapp_response(msg, usr):
     print("Starting to fetch whatsapp response")
     #first we extract info from whatson according to the message that was sent
     intent, entities = whatson_send_bot_response(msg)
+    #store prev response if neccesary:
+    if bool(intent):
+        prev_intent_data["intent"] = intent
     #then we insert eh user message in mongoDB:
-    insert_user_msg(intent, msg, usr)
+    insert_user_msg(prev_intent_data["intent"], msg, usr)
     #We interpret the messge info
     has_quantity, has_type, product = extract_watson_info(entities)
     #query for mongo response
-    response = query_mongo_response("respuestasWhatsapp",intent, product, has_quantity, has_type)
+    if bool(product):
+        print("Replacing my product data for: ", product, " because value was ", bool(product))
+        prev_intent_data["product"] = product
+    response = query_mongo_response("respuestasWhatsapp",prev_intent_data["intent"], prev_intent_data["product"], has_quantity, has_type)
     
     print("----------------------------------")
     print(response)
@@ -152,8 +158,8 @@ def retrieve_mongo_whatsapp_response(msg, usr):
             msg["message"] = msg["message"].replace('{type}', str(buy_data["type"]))
             buy_data["type"] = ""
         if '{product}' in msg["message"]:
-            msg["message"] = msg["message"].replace('{product}', str(product))
-            product = ""
+            msg["message"] = msg["message"].replace('{product}', str(prev_intent_data["product"]))
+            prev_intent_data["product"] = ""
     format_whatsapp_response(response[0].get('response'),usr)
     
     #return response[0].get('response')
@@ -171,12 +177,27 @@ def format_whatsapp_response(response, usr):
 def retrieve_mongo_response(msg, usr):
     #first we extract info from watson
     intent, entities = whatson_send_bot_response(msg)
+    if bool(intent):
+        prev_intent_data["intent"] = intent
+        prev_intent_data["product"] = "no_product"
+        buy_data["quantity"] = None
+        buy_data["type"] = None
     #then we insert the user message in MongoDB
-    insert_user_msg(intent, msg, usr)
+    insert_user_msg(prev_intent_data["intent"] , msg, usr)
     #We interpret the message info
+    
     has_quantity, has_type, product = extract_watson_info(entities)
+    
+    if bool(product):
+        print("Replacing my product data for: ", product, " because value was ", bool(product))
+        prev_intent_data["product"] = product
+    
+    if not has_quantity:
+        has_quantity = bool(buy_data.get("quantity"))
+    if not has_type:
+        has_type = bool(buy_data.get("type"))
     #query the intent and parameters on mongodb
-    response = query_mongo_response("respuestas",intent, product, has_quantity, has_type)
+    response = query_mongo_response("respuestas",prev_intent_data["intent"], prev_intent_data["product"], has_quantity, has_type)
     
     print("----------------------------------")
     print(response)
@@ -191,7 +212,7 @@ def retrieve_mongo_response(msg, usr):
             msg["message"] = msg["message"].replace('{type}', str(buy_data["type"]))
             buy_data["type"] = ""
         if '{product}' in msg["message"]:
-            msg["message"] = msg["message"].replace('{product}', str(product))
+            msg["message"] = msg["message"].replace('{product}', str(prev_intent_data["product"]))
             product = ""
     return response[0].get('response')
     
@@ -294,12 +315,15 @@ def watson_instance(iam_apikey: str, url: str, version: str = "2019-02-28") -> A
     return assistant
 
 def whatson_send_bot_response(msg):
+    print("Entering send_bot_response module")
     request_data['session_id'] = watson_create_session()
     response = watson_response(msg)
     #print("My intent name is: ", response["response"]["output"]["intents"][0]["intent"])
     #print("My answer was : ", response["response"]["output"]["generic"][0]["text"])
     print(response)
-    return response["response"]["output"]["intents"][0]["intent"], response["response"]["output"]["entities"]
-
+    try:
+        return response["response"]["output"]["intents"][0]["intent"], response["response"]["output"]["entities"]
+    except IndexError:
+        return None, response["response"]["output"]["entities"]
 
 #connect_to_mongo()
