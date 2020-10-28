@@ -1,7 +1,8 @@
 import React from "react";
 import CarouselHome from '../Components/CarouselHome';
 import Chart from "../Components/CovidCharts";
-import {CountryPicker, fetchData} from "../Components/CountryPicker";
+import {fetchData} from "../Components/CovidApi";
+import CountryPicker from "../Components/CountryPicker"
 import '../App.css'
 
 class Home extends React.Component {

@@ -2,8 +2,6 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import Carousel1 from '../img/Fondo 1.png'
 import Carousel2 from '../img/Fondo 2.png'
-import Carousel3 from '../img/prueba_covid.jpg'
-import Carousel4 from '../img/termometro.jpg'
 import Carousel from 'react-bootstrap/Carousel'
 import '../App.css'
 

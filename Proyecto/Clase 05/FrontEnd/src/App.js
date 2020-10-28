@@ -12,7 +12,6 @@ import Products from "./Pages/Products"
 import Home from "./Pages/Home";
 import Profile from "./Pages/Profile";
 
-
 const handleNewUserMessage = (newMessage) => {
   addResponseMessage("<p> hola </p>");
 };
