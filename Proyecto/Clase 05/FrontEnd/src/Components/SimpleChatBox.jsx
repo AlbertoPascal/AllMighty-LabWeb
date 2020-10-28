@@ -1,9 +1,23 @@
 import React from "react";
 import ChatBot from "react-simple-chatbot";
+import { ThemeProvider } from 'styled-components';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import axios from 'axios';
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
+
+const otherFontTheme = {
+  background: '#f5f8fb',
+  fontFamily: 'Segoe UI', 
+  headerBgColor: '#15586c',
+  headerFontColor: '#fff',
+  headerFontSize: '16px',
+  botBubbleColor: '#15586c',
+  botFontColor: '#fff',
+  userBubbleColor: '#fff',
+  userFontColor: '#4a4a4a'
+
+};
 
 class Review extends React.Component {
   constructor(props) {
@@ -115,6 +129,7 @@ class Review extends React.Component {
 class SimpleChatBox extends React.Component {
   render(){
     return(
+      <ThemeProvider theme={otherFontTheme}>
       <ChatBot steps={
         [
           {
@@ -139,6 +154,7 @@ class SimpleChatBox extends React.Component {
         height: "600px",
         floating: true
     }} />
+    </ThemeProvider>
     )
   }
 

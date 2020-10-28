@@ -5,6 +5,7 @@ import {useAuth0} from '@auth0/auth0-react';
 
 import ProfileButtons from "./ProfileButtons"
 
+import "../App.css"
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -44,13 +45,13 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="/">All Mighty Health</Navbar.Brand>
+      <Navbar className="NavBar-Style" variant="dark">
+        <Navbar.Brand className="NavBar-Title" href="/">All Mighty Health</Navbar.Brand>
         <Nav className="mr-auto">
-
+          <Nav.Link href="/products">Catálogo de productos</Nav.Link>
         </Nav>
-
         <ProfileButtons/>
+        
       </Navbar>
     );
   }

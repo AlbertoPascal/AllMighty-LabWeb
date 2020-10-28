@@ -27,17 +27,16 @@ class Home extends React.Component {
     return (
       <div>
         <br/>
+        <br/>
+        <CarouselHome/>
+        <br/>
+        <br/>
         <h1 className="titulo">Estadísticas de covid</h1>
         <br/>
         <br/>
         <CountryPicker handleCountryChange={this.handleCountryChange} />
         <Chart data={data} country={country} />
         <br/>
-        <br/>
-        <h1 className="titulo">Productos ofrecidos</h1>
-        <br/>
-        <br/>
-        <CarouselHome/>
       </div>
     );
   }

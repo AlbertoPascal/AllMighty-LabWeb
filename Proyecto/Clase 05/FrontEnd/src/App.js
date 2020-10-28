@@ -8,9 +8,8 @@ import "react-chat-widget/lib/styles.css";
 import ChatBot from 'react-simple-chatbot';
 import SimpleChatBox from './Components/SimpleChatBox';
 
-import LandingPage from "./Pages/LandingPage";
+import Products from "./Pages/Products"
 import Home from "./Pages/Home";
-import User from "./Pages/User";
 import Profile from "./Pages/Profile";
 
 
@@ -40,6 +39,9 @@ export default function App() {
         </Route>
         <Route path="/profile">
           <Profile />
+        </Route>
+        <Route path="/products">
+          <Products />
         </Route>
       </Switch>
 

@@ -2,6 +2,7 @@
   text-align: center;
 }
 
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -28,6 +29,10 @@
   color: #61dafb;
 }
 
+.NavBar-Style{
+  background-color: #15586c;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -42,19 +47,46 @@
   text-align: center;
 }
 
+.tituloCarousel{
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
 .carousel {
   width:700px;
-  height:500px;
+  height:600px;
   margin: auto;
 }
 
-.carousel-caption{
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  color: #343a40;
+.carouselContainer {
+  position: relative;
+  text-align: center;
 }
 
-.carousel-control-next-icon{
-  fill: black;
+.carouselCentered {
+  position: absolute;
+  top: 25%;
+  left: 15%;
+  transform: translate(-25%, -15%);
+}
+
+.carouselCentered2 {
+  position: absolute;
+  top: 35%;
+  left: 15%;
+  transform: translate(-35%, -15%);
+}
+
+.carouselCentered3 {
+  position: absolute;
+  top: 45%;
+  left: 15%;
+  transform: translate(-45%, -15%);
+}
+
+.carouselButton{
+  border-radius: 10px;
+  background-color: #15586c;
+  height: 40px;
 }
 
 @media (max-width: 900px) {

@@ -3,6 +3,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import "../App.css"
 
 const Info = () => {
     const {user, isAuthenticated, isLoading} = useAuth0();
@@ -12,7 +13,7 @@ const Info = () => {
       return "Cargando";
   
     return isAuthenticated ? (
-      <Container>
+      <div>
         <br/>
         <Row>
 
@@ -27,7 +28,7 @@ const Info = () => {
 
         </Row>
 
-      </Container>
+      </div>
     ) : (
       <p>Error. Usuario no autentificado</p>
     );

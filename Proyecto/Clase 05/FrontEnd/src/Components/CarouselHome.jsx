@@ -1,10 +1,12 @@
 import React from "react";
-import Carousel1 from '../img/cubrebocas.jpg'
-import Carousel2 from '../img/gel.jpg'
+import { Button } from "react-bootstrap";
+import Carousel1 from '../img/Fondo 1.png'
+import Carousel2 from '../img/Fondo 2.png'
 import Carousel3 from '../img/prueba_covid.jpg'
 import Carousel4 from '../img/termometro.jpg'
 import Carousel from 'react-bootstrap/Carousel'
 import '../App.css'
+
 
 const CarouselItems = () => {
   
@@ -12,59 +14,42 @@ const CarouselItems = () => {
     
       <Carousel>
           <Carousel.Item>
-            <img
-              width = {700}
-              height = {500}
-              className="d-block w-100"
-              src={Carousel1}
-              alt="Cubrebocas"
-            />
-            <Carousel.Caption>
-              <h3>Cubrebocas</h3>
-            </Carousel.Caption>
+            <div className="carouselContainer">
+              <h1 className="carouselCentered tituloCarousel">
+                Contamos con una gran cantidad de productos
+              </h1>
+              <h1 className="carouselCentered2 tituloCarousel">
+                Revisa nuestro catálogo
+              </h1>
+              <Button className="carouselCentered3 carouselButton"  href="/products">Dando click aquí</Button>
+              <img
+                width = {700}
+                height = {600}
+                className="d-block w-100"
+                src={Carousel1}
+                alt="slide 1"
+              />
+            </div>
           </Carousel.Item>
 
           <Carousel.Item>
-            <img
+            <div className="carouselContainer">
+              <h1 className="carouselCentered tituloCarousel">
+                ¿Necesitas ayuda? 
+              </h1>
+              <h2 className="carouselCentered2 tituloCarousel">
+                Utiliza nuestro bot asistente de compras
+              </h2>
+              <img
                 width = {700}
-                height = {500}
+                height = {600}
                 className="d-block w-100"
                 src={Carousel2}
-                alt="Desinfectante"
+                alt="slide 2"
               />
-            <Carousel.Caption>
-
-              <h3>Desinfectante y gel antibacterial</h3>
-            </Carousel.Caption>
+            </div>
           </Carousel.Item>
 
-          <Carousel.Item>
-            <img
-                width = {700}
-                height = {500}
-                className="d-block w-100"
-                src={Carousel3}
-                alt="Prueba de covid"
-              />
-            <Carousel.Caption>
-     
-              <h3>Pruebas para Covid-19</h3>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          <Carousel.Item>
-            <img
-                width = {700}
-                height = {500}
-                className="d-block w-100"
-                src={Carousel4}
-                alt="Termómetro"
-              />
-            <Carousel.Caption>
-            
-              <h3>Termómetros</h3>
-            </Carousel.Caption>
-          </Carousel.Item>
       </Carousel>
     )
 }
