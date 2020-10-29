@@ -122,9 +122,9 @@ def extract_watson_info(entities):
     return has_quantity, has_type, product
 
 #This method will insert a user's message to relate it to a query and retrieve an answer. 
-def insert_user_msg(intent, msg, usr):
+def insert_user_msg(intent, msg, usr, product):
     
-    value = {"msg" : msg, "intent": intent, "user" : usr}
+    value = {"msg" : msg, "intent": intent, "user" : usr, "product":product}
     insert_mongo('user_messages', value)
     print("Message inserted into user_messages collection")
 
@@ -140,7 +140,7 @@ def retrieve_mongo_whatsapp_response(msg, usr):
             if intent == "Saludos":
                 prev_intent_data["product"] = "no_product"
         #then we insert eh user message in mongoDB:
-        insert_user_msg(prev_intent_data["intent"], msg, usr)
+        insert_user_msg(prev_intent_data["intent"], msg, usr, prev_intent_data["product"])
         #We interpret the messge info
         has_quantity, has_type, product = extract_watson_info(entities)
         #query for mongo response
@@ -196,8 +196,7 @@ def retrieve_mongo_response(msg, usr):
         prev_intent_data["product"] = "no_product"
         buy_data["quantity"] = None
         buy_data["type"] = None
-    #then we insert the user message in MongoDB
-    insert_user_msg(prev_intent_data["intent"] , msg, usr)
+    
     #We interpret the message info
     
     has_quantity, has_type, product = extract_watson_info(entities)
@@ -205,6 +204,8 @@ def retrieve_mongo_response(msg, usr):
     if bool(product):
         print("Replacing my product data for: ", product, " because value was ", bool(product))
         prev_intent_data["product"] = product
+    #then we insert the user message in MongoDB
+    insert_user_msg(prev_intent_data["intent"] , msg, usr, prev_intent_data["product"])
     
     if not has_quantity:
         has_quantity = bool(buy_data.get("quantity"))
