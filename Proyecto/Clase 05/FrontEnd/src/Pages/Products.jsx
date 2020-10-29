@@ -1,10 +1,9 @@
 import React from "react";
-import ProfileInfo from "../Components/ProfileInfo"
-
+import Catalogo from "../Components/Catalogo"
 class Profile extends React.Component {
   render() {
     return (
-      <ProfileInfo/>
+      <Catalogo/>
     );
   }
 }
