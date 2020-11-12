@@ -45,13 +45,15 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <Navbar className="NavBar-Style" variant="dark">
+      <Navbar collapseOnSelect expand="lg" className="NavBar-Style" variant="dark">
         <Navbar.Brand className="NavBar-Title" href="/">All Mighty Health</Navbar.Brand>
-        <Nav className="mr-auto">
-          <Nav.Link href="/products">Catálogo de productos</Nav.Link>
-        </Nav>
-        <ProfileButtons/>
-        
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="/products">Catálogo de productos</Nav.Link>
+          </Nav>
+          <ProfileButtons/>
+        </Navbar.Collapse>
       </Navbar>
     );
   }
