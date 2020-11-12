@@ -23,6 +23,9 @@ class Home extends React.Component {
     this.setState({ data: fetchedData, country: country });
   };
 
+  /*
+
+  */
   render() {
     const { data, country } = this.state;
     return (

@@ -23,7 +23,7 @@ const CarouselItems = () => {
               <img
                 width = {700}
                 height = {600}
-                className="d-block w-100"
+                className="d-block w-100 imgCarousel"
                 src={Carousel1}
                 alt="slide 1"
               />
@@ -41,7 +41,7 @@ const CarouselItems = () => {
               <img
                 width = {700}
                 height = {600}
-                className="d-block w-100"
+                className="d-block w-100 imgCarousel"
                 src={Carousel2}
                 alt="slide 2"
               />

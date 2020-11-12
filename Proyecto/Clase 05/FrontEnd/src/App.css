@@ -89,9 +89,24 @@
   height: 40px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 600px) {
   .carousel {
     width:auto;
-    height:auto;
+    height:300px;
+  }
+  .imgCarousel{
+    height:300px;
+  }
+}
+
+@media (min-width: 600px) {
+  @media (max-width: 900px){
+    .carousel {
+      width:auto;
+      height:500px;
+    }
+    .imgCarousel{
+      height:500px;
+    }
   }
 }

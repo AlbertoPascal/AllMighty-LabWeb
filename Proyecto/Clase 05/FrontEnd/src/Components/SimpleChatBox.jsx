@@ -1,5 +1,6 @@
 import React from "react";
 import ChatBot from "react-simple-chatbot";
+import { useAuth0 } from '@auth0/auth0-react';
 import { ThemeProvider } from 'styled-components';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
@@ -16,10 +17,10 @@ const otherFontTheme = {
   botFontColor: '#fff',
   userBubbleColor: '#fff',
   userFontColor: '#4a4a4a'
-
 };
 
 class Review extends React.Component {
+  
   constructor(props) {
     console.log("Printing my props : ", props);
     super(props);
@@ -34,12 +35,13 @@ class Review extends React.Component {
   }
 
   async componentDidMount() { //Didmount
+
     console.log("I will now be mounted: ", this.props);
     const { steps } = this.props;
     const { msg } = steps;
     console.log("steps has " , steps)
     console.log(msg.value);
-    //console.log(this.call_whatson(msg.value));
+    
     await this.call_whatson(msg.value).then((data)=>
     {
       for (const item of data)
@@ -56,6 +58,7 @@ class Review extends React.Component {
       console.log("finished setting state. ", this.state);
     });
   }
+
   async fill_objs_to_render(data_arr)
   {
     console.log("Starting fill objs to render ... ", data_arr);
@@ -79,19 +82,24 @@ class Review extends React.Component {
      // console.log("returning from fill objs to render: ",{messages: fill_msgs, obj_types: fill_types} );
     return (test);
   }
+
   async call_whatson(sent_msg){
-    const usr = "test_user";
-    //await getUserData();
     
+    let usr = localStorage.getItem('user');
+    console.log(usr);
+
     var messages = null;
     var obj_types = null;
     var obj_data = null;
-    let watson =  await axios.post('http://localhost:5002/getMessage', { message: sent_msg, user: usr} ).then(resp => {
+    let watson =  await axios.post('https://93a84c3bccc3.ngrok.io/getMessage', { message: sent_msg, user: usr} ).then(resp => {
           console.log("My msg answer was ", resp.data.response);
           
           return resp.data.response;
 
-          }).catch(error =>{console.log(error)});   
+          }).catch(error =>{
+            console.log(error);
+            return error;
+          });   
           
     console.log("Calling values separator" );
     let var_filling =  await this.fill_objs_to_render(await watson).then((results)=>{
@@ -99,7 +107,6 @@ class Review extends React.Component {
     });    
     //console.log("Outside of watson variable ", await var_filling);
     
-  
     return await var_filling;
   }
 
@@ -119,7 +126,7 @@ class Review extends React.Component {
       
       })}
           
-          </div>
+      </div>
     );
     
   }

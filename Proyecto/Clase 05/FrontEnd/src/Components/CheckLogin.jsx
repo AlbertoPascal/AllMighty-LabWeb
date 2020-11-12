@@ -5,11 +5,14 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 const Login = () => {
     const {user, isAuthenticated, isLoading} = useAuth0();
-    
+  
     if(isLoading)
       return "";
     
     if(isAuthenticated){
+      //Save the user in the local storage
+      localStorage.setItem('user', user.email);
+
       return (
         <App color={"rosa"}/>
       )
