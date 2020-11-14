@@ -51,6 +51,8 @@ class WHATSAPP_MESSAGE(Resource):
     def post(self):
         print("contenido: ", request.form)
         message = request.form['Body']
+        if not message:
+            message = 'Location:' + request.form['Latitude'] + ',' + request.form['Longitude']
         user = request.form['From']
         print('Message: ', message)
         print('User: ', user)
