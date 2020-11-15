@@ -1,0 +1,97 @@
+{
+    "products" : [
+        {
+            "id": 1,
+            "name": "Kn95",
+            "description": "Cantidad en caja: 1 Mascara kn95 oficial, filtra el 95% del aire",
+            "img": "https://resources.claroshop.com/medios-plazavip/mkt/5ebe0bc1eb8a9_templa1jpg.jpg",
+            "price": 70,
+            "type": "mascara"
+        },
+    
+    
+        {
+            "id": 2,
+            "name": "Tela",
+            "description": "Cantidad en caja: 1 Mascara de algodon color negro",
+            "img": "https://i.pinimg.com/originals/8d/93/1d/8d931d284f0b1b7fdcf51aaa76007298.png",
+            "price": 50,
+            "type": "mascara"
+        },
+    
+        {
+            "id": 3,
+            "name": "Desechables",
+            "description": "Cantidad en caja: 1 Mascara desechable azul",
+            "img": "https://cdn.shopify.com/s/files/1/0310/4695/9163/products/55437DE9237D65AC6E3F422F28FE72C6_grande.png?v=1585989193",
+            "price": 70,
+            "type": "mascara"
+        },
+    
+        {
+            "id": 4,
+            "name": "Bote Chico",
+            "description": "Tamaño chico: 250ml Cantidad en caja: 1 Gel Antibacterial ",
+            "img": "https://www.educarelibros.com/store1/image/cache/catalog/Pape/Gel%20Antibacterial-500x500.jpg",
+            "price": 50,
+            "type": "desinfectante"
+        },
+    
+    
+        {
+            "id": 5,
+            "name": "Bote Mediano",
+            "description": "Tamaño mediano: 500ml Cantidad en caja: 1 Gel Antibacterial",
+            "img": "https://resources.claroshop.com/medios-plazavip/s2/10173/1359461/5e7fbb5bcf7ce-combo-kingsman-05-1-1600x1600.jpg",
+            "price": 70,
+            "type": "desinfectante"
+        },
+    
+        {
+            "id": 6,
+            "name": "Bote Grande",
+            "description": "Tamaño grande: 1L Cantidad en caja: 1 Gel Antibacterial",
+            "img": "https://www.fulloffice.com.ec/wp-content/uploads/2016/07/GEL-ANTIBACTERIAL-MEDIANO.jpg",
+            "price": 100,
+            "type": "desinfectante"
+        },
+        
+        {
+            "id": 7,
+            "name": "Digital",
+            "description": "Cantidad en caja: 1 Termometro digital infrarojo sin contacto ",
+            "img": "https://www.officedepot.com.mx/medias/93508.jpg-515ftw?context=bWFzdGVyfHJvb3R8MzMyMDl8aW1hZ2UvanBlZ3xoNjgvaDJiLzk4NjQzNzc2NjM1MTguanBnfGQ3ZjQ5YzI3MWI5NGJkOWY3ZTcwZTI3NTExOWQ4OGZlYWFhZjllMDdlNWI3YmJkZGRiMDllNDc2OGVmY2NmOTc",
+            "price": 300,
+            "type": "termometro"
+        },
+    
+    
+        {
+            "id": 8,
+            "name": "Mercurio",
+            "description": "Cantidad en caja: 1 Termometro de mercurio de aplicacion oral",
+            "img": "https://i1.wp.com/reciclario.com.ar/wp-content/uploads/termometro.jpg?resize=400%2C310",
+            "price": 100,
+            "type": "termometro"
+        },
+    
+        {
+            "id": 9,
+            "name": "Nasofarinje (antígeno)",
+            "description": "Cantidad en caja: 1 Prueba por via nasal cualitativa (+/-) que detecta proteínas del virus, supone una prueba de infección activa y los resultados pueden conocerse a los 10-15 minutos. ",
+            "img": "https://img.freepik.com/foto-gratis/covid-19-prueba-laboratorio-hisopo-nasal-laboratorio-hospital-enfermera-sosteniendo-tubo-ensayo-sangre-analisis-2019-ncov-nuevo-concepto-analisis-sangre-coronavirus-chino_1212-2123.jpg?size=626&ext=jpg",
+            "price": 1500,
+            "type": "prueba"
+        },
+    
+    
+        {
+            "id": 10,
+            "name": "Anticuerpo (sangre)",
+            "description": "Cantidad en caja: 1 Prueba mediante una muestra de sangre, cualitativa (+/-) que aproximadamente detecta los anticuerpos a los 7 días desde los síntomas y os resultados pueden conocerse a los 10-15 minutos.",
+            "img": "https://elglobal.es/wp-content/uploads/2020/03/GettyImages-1212988270-scaled.jpg",
+            "price": 3000,
+            "type": "prueba"
+        }    
+    ]
+}
