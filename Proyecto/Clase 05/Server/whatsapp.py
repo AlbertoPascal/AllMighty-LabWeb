@@ -19,14 +19,48 @@ client = Client(account_sid, auth_token)
 
 def respond_file_in_whatsapp(filename, number):
     curr_dir = os.getcwd()
-    print("current working directory: ", curr_dir)
-    message = client.messages.create(
-                body='',
-                from_ = 'whatsapp:+14155238886',
-                to = str(number),
-                media_url = "https://docs.google.com/uc?export=download&id=19jI1JIM9gFyo44wuhxLfUL5eeVNYDZb0",
-                
-            )
+    print("Filename was: ", filename)
+    message = None
+    if filename == 'termometro.pdf':        
+        message = client.messages.create(
+                    body='',
+                    from_ = 'whatsapp:+14155238886',
+                    to = str(number),
+                    media_url = "https://docs.google.com/uc?export=download&id=14cLMZXmXvhTBpbM9M8xTP-tShCnJxguM",
+                    
+                )
+    elif filename == 'catalogo_full.pdf':
+        message = client.messages.create(
+            body='',
+            from_ = 'whatsapp:+14155238886',
+            to = str(number),
+            media_url = "https://docs.google.com/uc?export=download&id=1cSFidwdnS42XbIrzLloeDAhI0hTvq4Nh",
+            
+        )
+    elif filename == 'cubrebocas.pdf':
+        message = client.messages.create(
+            body='',
+            from_ = 'whatsapp:+14155238886',
+            to = str(number),
+            media_url = "https://docs.google.com/uc?export=download&id=1ZXNwfzPn00OFAf1P2VDFvT0CWgntGhb_",
+            
+        )
+    elif filename == 'desinfectante.pdf':
+        message = client.messages.create(
+            body='',
+            from_ = 'whatsapp:+14155238886',
+            to = str(number),
+            media_url = "https://docs.google.com/uc?export=download&id=1UHnkKVmAJyXZdkIwMFAZcIu6GKGUU767",
+            
+        )
+    elif filename == 'pruebas.pdf':
+        message = client.messages.create(
+            body='',
+            from_ = 'whatsapp:+14155238886',
+            to = str(number),
+            media_url = "https://docs.google.com/uc?export=download&id=1XDVZAKMWA_A4VeXWJ4r5H5lBbXBRdST4",
+            
+        )
     print("Message sent! Sid: ", message.sid)
 def respond_in_whatsapp(message, number):
     print("connection data: ", account_sid, auth_token) 

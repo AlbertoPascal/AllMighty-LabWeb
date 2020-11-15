@@ -57,7 +57,6 @@ def connect_to_mongo(uri):
     #print(Allmightiness)
     
     #cursor = Allmightiness.find({"currency": "MXN"})
-    
     #for value in cursor:
     #    print(value)
     return client, db
