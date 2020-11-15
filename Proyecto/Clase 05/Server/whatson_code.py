@@ -63,7 +63,7 @@ def connect_to_mongo(uri):
 #No buscar solo el intent sino también los demás: entity, type, etc...
 def query_mongo_response(collection, intent, product, has_quantity, has_type):
     client, db = connect_to_mongo(uri)
-    if product == None:
+    if product == None or product == "":
         product = "no_product"
     query = {'intent': intent, 'product': product, 'has_quantity': has_quantity, 'has_type': has_type}
     found_values = query_mongo_request(db, collection, query)
@@ -153,18 +153,19 @@ def retrieve_mongo_whatsapp_response(msg, usr):
         print("----------------------------------")
         print(response)
         print("---------------------------------")
+        #Revisar cómo se resetean las variables. 
         for msg in response[0]["response"]:
             if '{quantity}' in msg["message"]:
                 print("--- my message needs to replace quantity" )
                 msg["message"] = msg["message"].replace('{quantity}', str(buy_data["quantity"]))
                 print(msg["message"])
-                buy_data["quantity"] = ""
+                #buy_data["quantity"] = ""
             if '{type}' in msg["message"]:
                 msg["message"] = msg["message"].replace('{type}', str(buy_data["type"]))
-                buy_data["type"] = ""
+                #buy_data["type"] = ""
             if '{product}' in msg["message"]:
                 msg["message"] = msg["message"].replace('{product}', str(prev_intent_data["product"]))
-                prev_intent_data["product"] = ""
+                #prev_intent_data["product"] = ""
         format_whatsapp_response(response[0].get('response'),usr)
     except IndexError:
         print("User sent an emoji or a sticker")
@@ -192,9 +193,10 @@ def retrieve_mongo_response(msg, usr):
     intent, entities = whatson_send_bot_response(msg)
     if bool(intent):
         prev_intent_data["intent"] = intent
-        prev_intent_data["product"] = "no_product"
-        buy_data["quantity"] = None
-        buy_data["type"] = None
+        if intent == "Saludos":
+                prev_intent_data["product"] = "no_product"
+                buy_data["quantity"] = None
+                buy_data["type"] = None
     
     #We interpret the message info
     

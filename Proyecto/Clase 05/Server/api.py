@@ -44,7 +44,8 @@ class GET_INTENT(Resource):
     def post(self):
         print(request.json)
         msg = request.json["intent"]
-        resp,intent = whatson_code.whatson_send_bot_response(msg)
+        usr = request.json["user"]
+        resp,intent = whatson_code.retrieve_mongo_response(msg, usr)
         return jsonify(este_es_el_intent = intent)
     
 class WHATSAPP_MESSAGE(Resource):
