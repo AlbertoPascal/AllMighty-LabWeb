@@ -91,7 +91,7 @@ class Review extends React.Component {
     var messages = null;
     var obj_types = null;
     var obj_data = null;
-    let watson =  await axios.post('https://93a84c3bccc3.ngrok.io/getMessage', { message: sent_msg, user: usr} ).then(resp => {
+    let watson =  await axios.post('http://127.0.0.1:5002/getMessage', { message: sent_msg, user: usr} ).then(resp => {
           console.log("My msg answer was ", resp.data.response);
           
           return resp.data.response;
