@@ -50,7 +50,7 @@ class NavBar extends React.Component {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="/products">Catálogo de productos</Nav.Link>
+            <Nav.Link href="/products">Catálogo de productos - Carrito de compras</Nav.Link>
           </Nav>
           <ProfileButtons/>
         </Navbar.Collapse>

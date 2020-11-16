@@ -13,6 +13,8 @@ class Products extends React.Component {
       cartItems:[],
       type: "",
     };
+
+    this.updateCarrito = this.updateCarrito.bind(this)
   }
 
   async componentDidMount(){
@@ -20,7 +22,7 @@ class Products extends React.Component {
     //Set all the products from the user's cart
     await this.fetchWishlist().then((data)=>
     {
-      console.log("Data wishlist: ",data);
+
       const cartItems = this.state.cartItems.slice();
       
       if(data !=null){
@@ -32,7 +34,7 @@ class Products extends React.Component {
 
       this.setState({cartItems});
     });
-    
+
     //Set all the products in the store
     await this.fetchProducts().then((data)=>
     {
@@ -50,6 +52,41 @@ class Products extends React.Component {
 
   }
 
+  async updateCarrito() {
+
+    let usr = localStorage.getItem('user');
+
+    //http://127.0.0.1:5002
+    let products = await axios.post('http://127.0.0.1:5002/getWishlist', { user: usr} ).then(resp => {
+      
+      return resp.data.wishlist;
+
+      })
+      .catch(error =>{
+        console.log(error);
+        return error;
+    });  
+
+    let cartItems = [];
+    this.setState({cartItems});
+
+    cartItems = this.state.cartItems.slice();
+    
+    if(products !=null){
+      for (const cartItem of products)
+      {
+        cartItems.push(cartItem);
+      }
+    }
+    else{
+      cartItems = [];
+    }
+
+    this.setState({cartItems});
+ 
+  }
+
+
   //Fetch all the products from the user's cart from the database
   async fetchWishlist(){
     let usr = localStorage.getItem('user');
@@ -66,7 +103,6 @@ class Products extends React.Component {
     });  
 
     //let products = data.products;
-    
     return await products;
   }
 
@@ -89,19 +125,8 @@ class Products extends React.Component {
     return await products;
   }
 
-  async addToCart (product) {
 
-    /*const cartItems = this.state.cartItems.slice();
-    let alreadyInCart =false;
-    cartItems.forEach((item) => {
-      if (item.id === product.id){
-        item.count++;
-        alreadyInCart= true;
-      }
-    });
-    if (!alreadyInCart){
-      cartItems.push({...product, count: 1});
-    }*/
+  async addToCart (product) {
 
     let usr = localStorage.getItem('user');
 
@@ -115,10 +140,12 @@ class Products extends React.Component {
         return error;
     });  
 
+    this.updateCarrito();
+   
   }
 
 
-  async removeFromCart (product) {
+  async removeFromCart (product, Items) {
 
     let usr = localStorage.getItem('user');
 
@@ -131,7 +158,9 @@ class Products extends React.Component {
         console.log(error);
         return error;
     });  
-     
+    
+    this.updateCarrito();
+
   }
 
 
@@ -157,14 +186,16 @@ class Products extends React.Component {
           <div className="content">
             <div className="main">
               <Filter count={this.state.products.length} 
-              type={this.state.type}>
+              type={this.state.type}
               typeProducts={this.typeProducts}  
+              >
+              
               </Filter>
 
-              <Catalogo products={this.state.products} addToCart={this.addToCart}></Catalogo>
+              <Catalogo products={this.state.products} addToCart={this.addToCart} cartItems={this.state.cartItems} updateCarrito={this.updateCarrito}></Catalogo>
             </div>
             <div className="sidebar">
-              <Carrito cartItems={this.state.cartItems}/>
+              <Carrito cartItems={this.state.cartItems} removeFromCart={this.removeFromCart} updateCarrito={this.updateCarrito}/>
             </div>
           </div>
 

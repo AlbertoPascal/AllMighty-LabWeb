@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth0 } from '@auth0/auth0-react';
+import Products from '../Pages/Products';
 
 import { Card, Button, CardColumns } from 'react-bootstrap';
 import "../App.css"
@@ -8,8 +9,9 @@ import "../styles/Catalogo.css";
 
   export default class Catalogo extends React.Component {
 
-    constructor(props){
+    constructor(props) {
       super(props);
+  
     }
 
     render() {
@@ -26,7 +28,9 @@ import "../styles/Catalogo.css";
                                 {item.description} <br/>
                                 tipo: {item.type}
                             </Card.Text>
-                            <Button onClick={()=>this.props.addToCart(item)} variant="success divProductosText">Comprar</Button>
+                            <Button onClick={()=>{
+                              this.props.addToCart(item);
+                            }} variant="success divProductosText">Comprar</Button>
                         </Card.Body>
                 </Card>
                 ))}
