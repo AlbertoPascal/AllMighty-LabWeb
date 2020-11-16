@@ -3,16 +3,86 @@ import data from "../data.json"
 import Catalogo from "../Components/Catalogo"
 import Filter from "../Components/Filter";
 import Carrito from "../Components/Carrito";
+import axios from 'axios';
 
 class Products extends React.Component {
   constructor(){
     super();
     this.state = {
-      products: data.products,
+      products: [],
       cartItems:[],
       type: "",
     };
   }
+
+  async componentDidMount(){
+    
+    //Set all the products from the user's cart
+    await this.fetchWishlist().then((data)=>
+    {
+      const cartItems = this.state.cartItems.slice();
+      
+      for (const cartItem of data)
+      {
+        cartItems.push(cartItem);
+      }
+      this.setState({cartItems});
+    });
+    
+    //Set all the products in the store
+    await this.fetchProducts().then((data)=>
+    {
+      const products = this.state.products.slice();
+      
+      for (const product of data)
+      {
+        products.push(product);
+      }
+      this.setState({products});
+    });
+
+  }
+
+  //Fetch all the products from the user's cart from the database
+  async fetchWishlist(){
+    let usr = localStorage.getItem('user');
+
+    /*let products = await axios.post('http://127.0.0.1:5002/getWishlist', { user: usr} ).then(resp => {
+      console.log("My msg answer was ", resp.data.response);
+      
+      return resp.data.response;
+
+      })
+      .catch(error =>{
+        console.log(error);
+        return error;
+    });  */
+
+    let products = data.products;
+    
+    return await products;
+  }
+
+  
+  //Fetch all the products from the database
+  async fetchProducts(){
+
+    /*let products = await axios.post('http://127.0.0.1:5002/getProducts').then(resp => {
+      console.log("My msg answer was ", resp.data.response);
+      
+      return resp.data.response;
+
+      })
+      .catch(error =>{
+        console.log(error);
+        return error;
+    });  */
+
+    let products = data.products;
+    
+    return await products;
+  }
+
   addToCart = (product) => {
     const cartItems = this.state.cartItems.slice();
     let alreadyInCart =false;
