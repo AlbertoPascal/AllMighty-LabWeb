@@ -131,81 +131,86 @@ def insert_user_msg(intent, msg, usr, product):
     print("Message inserted into user_messages collection")
 
 def retrieve_mongo_whatsapp_response(msg, usr):
-   
-    print("Starting to fetch whatsapp response")
-    try:
-        #first we extract info from whatson according to the message that was sent
-        intent, entities = whatson_send_bot_response(msg)
-        #store prev response if neccesary:
-        if bool(intent):
-            prev_intent_data["intent"] = intent
-            if intent in ["Continuar_Compra", "Saludos", "Finalizar_Compra"]:
-                prev_intent_data["product"]='no_product'
-                buy_data["quantity"] = None
-                buy_data["type"] = None
-            #then we insert eh user message in mongoDB:
-       
-            insert_user_msg(prev_intent_data["intent"], msg, usr, prev_intent_data["product"])
-            #We interpret the messge info
-            has_quantity, has_type, product = extract_watson_info(entities, usr, msg)
-            #query for mongo response
-        if not (intent == "Confirmación" or intent == "Email"):
-            if bool(product):
-                print("Replacing my product data for: ", product, " because value was ", bool(product))
-                prev_intent_data["product"] = product
+    if "Location:" in msg:
+        msg = msg.replace("Location:", "")
+        lat, longitude = msg.split(",")
+        print("sending location info")
+        whatsapp.test_location(lat,longitude, usr)
+    else:
+        print("Starting to fetch whatsapp response")
+        try:
+            #first we extract info from whatson according to the message that was sent
+            intent, entities = whatson_send_bot_response(msg)
+            #store prev response if neccesary:
+            if bool(intent):
+                prev_intent_data["intent"] = intent
+                if intent in ["Continuar_Compra", "Saludos", "Finalizar_Compra"]:
+                    prev_intent_data["product"]='no_product'
+                    buy_data["quantity"] = None
+                    buy_data["type"] = None
+                #then we insert eh user message in mongoDB:
+           
+                insert_user_msg(prev_intent_data["intent"], msg, usr, prev_intent_data["product"])
+                #We interpret the messge info
+                has_quantity, has_type, product = extract_watson_info(entities, usr, msg)
+                #query for mongo response
+            if not (intent == "Confirmación" or intent == "Email"):
+                if bool(product):
+                    print("Replacing my product data for: ", product, " because value was ", bool(product))
+                    prev_intent_data["product"] = product
+                    
                 
-            
-            response = query_mongo_response("respuestasWhatsapp",prev_intent_data["intent"], prev_intent_data["product"], has_quantity, has_type)
-            
-            print("----------------------------------")
-            print(response)
-            print("---------------------------------")
-            #Revisar cómo se resetean las variables. 
-            for msg in response[0]["response"]:
-                if '{quantity}' in msg["message"]:
-                    print("--- my message needs to replace quantity" )
-                    msg["message"] = msg["message"].replace('{quantity}', str(buy_data["quantity"]))
-                    print(msg["message"])
-                    #buy_data["quantity"] = ""
-                if '{type}' in msg["message"]:
-                    msg["message"] = msg["message"].replace('{type}', str(buy_data["type"]))
-                    #buy_data["type"] = ""
-                if '{product}' in msg["message"]:
-                    msg["message"] = msg["message"].replace('{product}', str(prev_intent_data["product"]))
-                    #prev_intent_data["product"] = ""
-            format_whatsapp_response(response[0].get('response'),usr)
-            
-        #Check if we need to add to shopping cart. 
-        if (prev_intent_data["intent"] == r"Confirmación" or prev_intent_data["intent"] == "Email") and bool(prev_intent_data["product"]) and bool(buy_data["type"]) and bool(buy_data["quantity"]) and bool(prev_intent_data["correo"]):
-            #We are ready to add to the cart. 
-            print("**************************************************")
-            print("STARTING TO CHECK FOR COMPLETE PRODUCT INFORMATION")
-            #First we find the corresponding product id: 
-            query = {'type': str(prev_intent_data["product"]) , 'name':str(buy_data["type"])}
-            print("My query: ", query)
-            obj_data = general_mongo_query('productos', query)
-            print("--------------------OBJ DATA--------------------")
-            print(obj_data)
-            print("query: ", query)
-            print("-------------------------------------------------")
-            print(prev_intent_data)
-            print("-------------------------------------------------")
-            add_item_to_cart(obj_data[0]["_id"], buy_data["quantity"], prev_intent_data["correo"])
-            print("Item added-...........................")
-            response = query_mongo_response("respuestasWhatsapp",prev_intent_data["intent"], prev_intent_data["product"], has_quantity, has_type)
-            format_whatsapp_response(response[0].get('response'),usr)
-            
-            
-        elif (prev_intent_data["intent"] == r"Confirmación") and bool(prev_intent_data["product"]) and bool(buy_data["type"]) and bool(buy_data["quantity"]):
-                #We need to ask for email first. 
-                whatsapp.respond_in_whatsapp("Por favor compártenos tu correo para que tu carrito esté preparado la próxima vez que entres a la página.", usr)
-            
-    except IndexError:
-        print("User sent an emoji or a sticker")
-        if msg != "" and msg != None:
-            whatsapp.respond_in_whatsapp(msg, usr)
-        else:
-            whatsapp.respond_in_whatsapp("¡Wow! Yo todavía no sé mandar eso :(", usr)
+                response = query_mongo_response("respuestasWhatsapp",prev_intent_data["intent"], prev_intent_data["product"], has_quantity, has_type)
+                
+                print("----------------------------------")
+                print(response)
+                print("---------------------------------")
+                #Revisar cómo se resetean las variables. 
+                for msg in response[0]["response"]:
+                    if '{quantity}' in msg["message"]:
+                        print("--- my message needs to replace quantity" )
+                        msg["message"] = msg["message"].replace('{quantity}', str(buy_data["quantity"]))
+                        print(msg["message"])
+                        #buy_data["quantity"] = ""
+                    if '{type}' in msg["message"]:
+                        msg["message"] = msg["message"].replace('{type}', str(buy_data["type"]))
+                        #buy_data["type"] = ""
+                    if '{product}' in msg["message"]:
+                        msg["message"] = msg["message"].replace('{product}', str(prev_intent_data["product"]))
+                        #prev_intent_data["product"] = ""
+                format_whatsapp_response(response[0].get('response'),usr)
+                
+            #Check if we need to add to shopping cart. 
+            if (prev_intent_data["intent"] == r"Confirmación" or prev_intent_data["intent"] == "Email") and bool(prev_intent_data["product"]) and bool(buy_data["type"]) and bool(buy_data["quantity"]) and bool(prev_intent_data["correo"]):
+                #We are ready to add to the cart. 
+                print("**************************************************")
+                print("STARTING TO CHECK FOR COMPLETE PRODUCT INFORMATION")
+                #First we find the corresponding product id: 
+                query = {'type': str(prev_intent_data["product"]) , 'name':str(buy_data["type"])}
+                print("My query: ", query)
+                obj_data = general_mongo_query('productos', query)
+                print("--------------------OBJ DATA--------------------")
+                print(obj_data)
+                print("query: ", query)
+                print("-------------------------------------------------")
+                print(prev_intent_data)
+                print("-------------------------------------------------")
+                add_item_to_cart(obj_data[0]["_id"], buy_data["quantity"], prev_intent_data["correo"])
+                print("Item added-...........................")
+                response = query_mongo_response("respuestasWhatsapp",prev_intent_data["intent"], prev_intent_data["product"], has_quantity, has_type)
+                format_whatsapp_response(response[0].get('response'),usr)
+                
+                
+            elif (prev_intent_data["intent"] == r"Confirmación") and bool(prev_intent_data["product"]) and bool(buy_data["type"]) and bool(buy_data["quantity"]):
+                    #We need to ask for email first. 
+                    whatsapp.respond_in_whatsapp("Por favor compártenos tu correo para que tu carrito esté preparado la próxima vez que entres a la página.", usr)
+                
+        except IndexError:
+            print("User sent an emoji or a sticker")
+            if msg != "" and msg != None:
+                whatsapp.respond_in_whatsapp(msg, usr)
+            else:
+                whatsapp.respond_in_whatsapp("¡Wow! Yo todavía no sé mandar eso :(", usr)
     
     #return response[0].get('response')
 def retrieve_wishlist_products(email):
@@ -366,48 +371,76 @@ def format_whatsapp_response(response, usr):
             whatsapp.respond_in_whatsapp(element["message"],usr)
 #This function will be called from jsx to retrieve all data. 
 def retrieve_mongo_response(msg, usr):
-    #first we extract info from watson
-    intent, entities = whatson_send_bot_response(msg)
-    if bool(intent):
-        prev_intent_data["intent"] = intent
-        if intent == "Saludos":
-                prev_intent_data["product"] = "no_product"
-                buy_data["quantity"] = None
-                buy_data["type"] = None
-    
-    #We interpret the message info
-    
-    has_quantity, has_type, product = extract_watson_info(entities, usr, msg)
-    
-    if bool(product):
-        print("Replacing my product data for: ", product, " because value was ", bool(product))
-        prev_intent_data["product"] = product
-    #then we insert the user message in MongoDB
-    insert_user_msg(prev_intent_data["intent"] , msg, usr, prev_intent_data["product"])
-    
-    if not has_quantity:
-        has_quantity = bool(buy_data.get("quantity"))
-    if not has_type:
-        has_type = bool(buy_data.get("type"))
-    #query the intent and parameters on mongodb
-    response = query_mongo_response("respuestas",prev_intent_data["intent"], prev_intent_data["product"], has_quantity, has_type)
-    
-    print("----------------------------------")
-    print(response)
-    print("---------------------------------")
-    for msg in response[0]["response"]:
-        if '{quantity}' in msg["message"]:
-            print("--- my message needs to replace quantity" )
-            msg["message"] = msg["message"].replace('{quantity}', str(buy_data["quantity"]))
-            print(msg["message"])
-            buy_data["quantity"] = ""
-        if '{type}' in msg["message"]:
-            msg["message"] = msg["message"].replace('{type}', str(buy_data["type"]))
-            buy_data["type"] = ""
-        if '{product}' in msg["message"]:
-            msg["message"] = msg["message"].replace('{product}', str(prev_intent_data["product"]))
-            product = ""
-    return response[0].get('response')
+    try:
+        prev_intent_data["correo"] = str(usr)
+	    #first we extract info from watson
+        intent, entities = whatson_send_bot_response(msg)
+	    #store prev response if neccesary:
+        print("********************************")
+        print("Intent: ", intent, "entities: ", entities)
+        if bool(intent):
+            prev_intent_data["intent"] = intent
+            if intent in ["Saludos", "Continuar_Compra", "Finalizar_Compra"]:
+                    prev_intent_data["product"] = "no_product"
+                    buy_data["quantity"] = None
+                    buy_data["type"] = None
+	    
+	    #We interpret the message info
+        has_quantity, has_type, product = extract_watson_info(entities, usr, msg)
+        print("Looking to extract watson info:....", has_quantity, " ", has_type, " ", product)
+        print("My prev_intent data is: ", prev_intent_data, " and buy data: ", buy_data)
+        if not (intent == "Confirmación" or intent == "Email"):
+            if bool(product):
+                print("Replacing my product data for: ", product, " because value was ", bool(product))
+                prev_intent_data["product"] = product
+		    #then we insert the user message in MongoDB
+            insert_user_msg(prev_intent_data["intent"] , msg, usr, prev_intent_data["product"])
+	    
+            if not has_quantity:
+                has_quantity = bool(buy_data.get("quantity"))
+            if not has_type:
+                has_type = bool(buy_data.get("type"))
+		    #query the intent and parameters on mongodb
+            response = query_mongo_response("respuestas",prev_intent_data["intent"], prev_intent_data["product"], has_quantity, has_type)
+		    
+            print("----------------------------------")
+            print(response)
+            print("---------------------------------")
+            for msg in response[0]["response"]:
+                if '{quantity}' in msg["message"]:
+                    print("--- my message needs to replace quantity" )
+                    msg["message"] = msg["message"].replace('{quantity}', str(buy_data["quantity"]))
+                    print(msg["message"])
+                    #buy_data["quantity"] = ""
+                if '{type}' in msg["message"]:
+                    msg["message"] = msg["message"].replace('{type}', str(buy_data["type"]))
+                    #buy_data["type"] = ""
+                if '{product}' in msg["message"]:
+                    msg["message"] = msg["message"].replace('{product}', str(prev_intent_data["product"]))
+                    #product = ""
+                return response[0].get('response')
+        if (prev_intent_data["intent"] == r"Confirmación" or prev_intent_data["intent"] == "Email") and bool(prev_intent_data["product"]) and bool(buy_data["type"]) and bool(buy_data["quantity"]) and bool(prev_intent_data["correo"]):
+            #We are ready to add to the cart. 
+            print("**************************************************")
+            print("STARTING TO CHECK FOR COMPLETE PRODUCT INFORMATION")
+            #First we find the corresponding product id: 
+            query = {'type': str(prev_intent_data["product"]) , 'name':str(buy_data["type"])}
+            print("My query: ", query)
+            obj_data = general_mongo_query('productos', query)
+            print("--------------------OBJ DATA--------------------")
+            print(obj_data)
+            print("query: ", query)
+            print("-------------------------------------------------")
+            print(prev_intent_data)
+            print("-------------------------------------------------")
+            add_item_to_cart(obj_data[0]["_id"], buy_data["quantity"], prev_intent_data["correo"])
+            print("Item added-...........................")
+            response = query_mongo_response("respuestasWhatsapp",prev_intent_data["intent"], prev_intent_data["product"], has_quantity, has_type)
+            
+            return response[0].get('response')
+                     
+    except IndexError:
+        print("User sent something else")
     
 def watson_create_session():
 

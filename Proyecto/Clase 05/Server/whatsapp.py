@@ -5,6 +5,10 @@ Created on Tue Oct 13 21:00:13 2020
 """
 
 # Download the helper library from https://www.twilio.com/docs/python/install
+import geopy
+from geopy.geocoders import Nominatim
+from geopy.extra.rate_limiter import RateLimiter
+
 from twilio.rest import Client
 from dotenv import load_dotenv
 import os
@@ -15,13 +19,15 @@ import os
 load_dotenv()
 account_sid = os.getenv('ACCOUNT_SID')
 auth_token = os.getenv('AUTH_TOKEN')
+
 client = Client(account_sid, auth_token)
+
 
 def respond_file_in_whatsapp(filename, number):
     curr_dir = os.getcwd()
     print("Filename was: ", filename)
     message = None
-    if filename == 'termometro.pdf':        
+    if filename == 'termometro.pdf':       
         message = client.messages.create(
                     body='',
                     from_ = 'whatsapp:+14155238886',
@@ -72,3 +78,31 @@ def respond_in_whatsapp(message, number):
                               )
     
     print(message.sid)
+
+def test_location(lat, longitude, number):
+    locator = Nominatim(user_agent="myGeocoder")
+    coordinates = str(lat) + ", " + str(longitude)
+    location = locator.reverse(coordinates)
+    
+    temp_coords = "19.402248, -99.170477"
+    temp_location = locator.reverse(temp_coords)
+    
+    body_msg = "La tienda más cercana a '" + str(location.raw["display_name"]) + "' es"
+    print(body_msg)
+    location_no_spaces = temp_location.raw["display_name"]
+    while " " in location_no_spaces:
+        location_no_spaces = location_no_spaces.replace(" ", "+")
+    print(location_no_spaces)
+    google_maps_url = r"https://www.google.com.mx/maps/dir/" + lat + "," + longitude +r"/"+ r"{}".format(str(location_no_spaces))
+    message = client.messages.create(
+                body= body_msg,
+                from_= "whatsapp:+14155238886",
+                #PersistentAction= "geo:37.787890,-122.391664",
+                to=str(number)
+                )
+    message = client.messages.create(
+                body= google_maps_url,
+                from_= "whatsapp:+14155238886",
+                #PersistentAction= "geo:37.787890,-122.391664",
+                to=str(number)
+                )

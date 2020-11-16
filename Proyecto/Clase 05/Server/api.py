@@ -34,6 +34,7 @@ class GET_MESSAGE(Resource):
         msg = request.json["message"]
         usr = request.json["user"]
         responses = whatson_code.retrieve_mongo_response(msg, usr)
+        print("My response was : ", responses)
         for element in responses:
             print("msg: ", element)
         print("-----------------------")
