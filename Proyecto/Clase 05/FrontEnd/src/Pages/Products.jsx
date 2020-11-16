@@ -55,7 +55,7 @@ class Products extends React.Component {
     let usr = localStorage.getItem('user');
 
     //http://127.0.0.1:5002
-    let products = await axios.post('https://fb87ec5b1205.ngrok.io/getWishlist', { user: usr} ).then(resp => {
+    let products = await axios.post('http://127.0.0.1:5002/getWishlist', { user: usr} ).then(resp => {
       
       return resp.data.wishlist;
 
@@ -71,6 +71,24 @@ class Products extends React.Component {
   }
 
   
+  //Fetch all the products from the database
+  async fetchProducts(){
+
+    let products = await axios.post('http://127.0.0.1:5002/getProducts', { }).then(resp => {
+      
+      return  resp.data.product_list;
+
+      })
+      .catch(error =>{
+        console.log(error);
+        return error;
+    });  
+
+    //let products = data.products;
+    
+    return await products;
+  }
+
   async addToCart (product) {
 
     /*const cartItems = this.state.cartItems.slice();
@@ -87,7 +105,7 @@ class Products extends React.Component {
 
     let usr = localStorage.getItem('user');
 
-    await axios.post('https://fb87ec5b1205.ngrok.io/addProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
+    await axios.post('http://127.0.0.1:5002/addProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
       
       console.log(resp.data.msg);
 
@@ -104,7 +122,7 @@ class Products extends React.Component {
 
     let usr = localStorage.getItem('user');
 
-    await axios.post('https://fb87ec5b1205.ngrok.io/removeProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
+    await axios.post('http://127.0.0.1:5002/removeProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
       
       console.log(resp.data.msg);
 
@@ -115,25 +133,6 @@ class Products extends React.Component {
     });  
      
   }
-
-  //Fetch all the products from the database
-  async fetchProducts(){
-
-    let products = await axios.post('https://fb87ec5b1205.ngrok.io/getProducts', { }).then(resp => {
-      
-      return  resp.data.product_list;
-
-      })
-      .catch(error =>{
-        console.log(error);
-        return error;
-    });  
-
-    //let products = data.products;
-    
-    return await products;
-  }
-
 
 
   typeProducts =(event) => {
