@@ -5,9 +5,13 @@ import { Card, Button, CardColumns } from 'react-bootstrap';
 import "../App.css"
 import "../styles/Catalogo.css";
 
-  
 
   export default class Catalogo extends React.Component {
+
+    constructor(props){
+      super(props);
+    }
+
     render() {
       return (        
         <div>         

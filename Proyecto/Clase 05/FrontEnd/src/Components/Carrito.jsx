@@ -1,7 +1,14 @@
 import React from 'react'
 import { Button } from 'react-bootstrap';
+import Products from '../Pages/Products';
 
 export default class Carrito extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.catalogue = new Products();
+    }
+
     render() {
         const {cartItems} = this.props;
         return (
@@ -26,7 +33,7 @@ export default class Carrito extends React.Component {
                                             <div>{item.description}</div>
                                             <div className="right">
                                                 {item.price} x {item.count} {" "}
-                                                <Button onClick={()=>this.props.removeFromCart(item)} variant="danger"> Quitar</Button>
+                                                <Button onClick={()=>this.catalogue.removeFromCart(item)} variant="danger"> Quitar</Button>
                                             </div>
                                         </div>
                                         </li>

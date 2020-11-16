@@ -20,12 +20,16 @@ class Products extends React.Component {
     //Set all the products from the user's cart
     await this.fetchWishlist().then((data)=>
     {
+      console.log("Data wishlist: ",data);
       const cartItems = this.state.cartItems.slice();
       
-      for (const cartItem of data)
-      {
-        cartItems.push(cartItem);
+      if(data !=null){
+        for (const cartItem of data)
+        {
+          cartItems.push(cartItem);
+        }
       }
+
       this.setState({cartItems});
     });
     
@@ -34,10 +38,13 @@ class Products extends React.Component {
     {
       const products = this.state.products.slice();
       
-      for (const product of data)
-      {
-        products.push(product);
+      if(data !=null){
+        for (const product of data)
+        {
+          products.push(product);
+        }
       }
+  
       this.setState({products});
     });
 
@@ -46,9 +53,9 @@ class Products extends React.Component {
   //Fetch all the products from the user's cart from the database
   async fetchWishlist(){
     let usr = localStorage.getItem('user');
-    console.log("My user is: ", usr);
-    let products = await axios.post('http://127.0.0.1:5002/getWishlist', { user: usr} ).then(resp => {
-      console.log("My msg answer was ", resp);
+
+    //http://127.0.0.1:5002
+    let products = await axios.post('https://fb87ec5b1205.ngrok.io/getWishlist', { user: usr} ).then(resp => {
       
       return resp.data.wishlist;
 
@@ -64,27 +71,9 @@ class Products extends React.Component {
   }
 
   
-  //Fetch all the products from the database
-  async fetchProducts(){
+  async addToCart (product) {
 
-    /*let products = await axios.post('http://127.0.0.1:5002/getProducts', { }).then(resp => {
-      console.log("My msg answer was ", resp.data.response);
-      
-      return resp.data.response;
-
-      })
-      .catch(error =>{
-        console.log(error);
-        return error;
-    });  */
-
-    let products = data.products;
-    
-    return await products;
-  }
-
-  addToCart = (product) => {
-    const cartItems = this.state.cartItems.slice();
+    /*const cartItems = this.state.cartItems.slice();
     let alreadyInCart =false;
     cartItems.forEach((item) => {
       if (item.id === product.id){
@@ -94,9 +83,58 @@ class Products extends React.Component {
     });
     if (!alreadyInCart){
       cartItems.push({...product, count: 1});
-    }
-    this.setState({cartItems});
-  };
+    }*/
+
+    let usr = localStorage.getItem('user');
+
+    await axios.post('https://fb87ec5b1205.ngrok.io/addProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
+      
+      console.log(resp.data.msg);
+
+    })
+    .catch(error =>{
+        console.log(error);
+        return error;
+    });  
+
+  }
+
+
+  async removeFromCart (product) {
+
+    let usr = localStorage.getItem('user');
+
+    await axios.post('https://fb87ec5b1205.ngrok.io/removeProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
+      
+      console.log(resp.data.msg);
+
+    })
+    .catch(error =>{
+        console.log(error);
+        return error;
+    });  
+     
+  }
+
+  //Fetch all the products from the database
+  async fetchProducts(){
+
+    let products = await axios.post('https://fb87ec5b1205.ngrok.io/getProducts', { }).then(resp => {
+      
+      return  resp.data.product_list;
+
+      })
+      .catch(error =>{
+        console.log(error);
+        return error;
+    });  
+
+    //let products = data.products;
+    
+    return await products;
+  }
+
+
 
   typeProducts =(event) => {
     console.log(event.target.value);
