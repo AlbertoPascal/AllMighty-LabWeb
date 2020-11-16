@@ -76,11 +76,34 @@ class GET_PRODUCTS(Resource):
         products = whatson_code.retrieve_products()
         print("products remaining: ", products)
         return jsonify(product_list = products)
-    
+
+class ADD_PRODUCTS(Resource):
+    def post(self):
+        print("Fetching avaliable products")
+        name = request.json["name"]
+        type_ = request.json["type"]
+        email = request.json["email"]
+        whatson_code.add_items_to_wishlist(name, type_, email)
+        print("products added")
+        return jsonify(msg = "Se agregó el producto al carrito")
+
+class REMOVE_PRODUCTS(Resource):
+    def post(self):
+        print("Removing product")
+        name = request.json["name"]
+        type_ = request.json["type"]
+        email = request.json["email"]
+        whatson_code.remove_from_wishlist(name, type_, email)
+        print("products removed")
+        return jsonify(msg = "Se quitó el producto del carrito")
+
 api.add_resource(GET_MESSAGE, '/getMessage')  # Route_1
 api.add_resource(GET_INTENT, '/getIntent')
 api.add_resource(WHATSAPP_MESSAGE, '/whatsapp_response')
 api.add_resource(GET_WISHLIST, '/getWishlist')
 api.add_resource(GET_PRODUCTS, '/getProducts')
+api.add_resource(ADD_PRODUCTS, '/addProduct')
+api.add_resource(REMOVE_PRODUCTS, '/removeProduct')
+
 if __name__ == '__main__':
     app.run(port='5002')

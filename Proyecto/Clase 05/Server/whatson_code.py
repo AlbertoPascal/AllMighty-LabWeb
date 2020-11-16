@@ -245,6 +245,75 @@ def retrieve_products():
     else:
         #user has no wishlist.
         return []
+def add_items_to_wishlist(name, item_type, email):
+    
+    query = {"name":name, "type": item_type}
+    item_info = general_mongo_query('productos', query)
+    
+    if item_info:
+        #product found:
+        itemID = item_info[0]["_id"]
+        query = {"email":email}
+        wishlist_data = general_mongo_query('wishlist', query)
+        wishlist = []
+        try:
+            wishlist = wishlist_data[0]['wishlist']
+        except:
+            wishlist_data = None
+        if not wishlist_data:
+            #create a new wishlsit for the user:
+            values_to_insert = {"email": email, "wishlist": []}
+            insert_mongo('wishlist', values_to_insert)
+        item_exists = False
+        #Check for the element id if it is already added:
+        for element in wishlist:
+            print("Looking in wishlist for itemID: ", itemID)
+            if element["product"] == itemID:
+                #item is already in wishlist. We only update this field. 
+                element["quantity"] = int(element["quantity"]) + int(1)
+                item_exists = True
+                break
+        if item_exists:
+            newvalues = { "$set": {"wishlist": wishlist } }
+            update_mongo('wishlist', query, newvalues)
+        else:
+            #Insert new value in wishlist. 
+            wishlist.append({'product': itemID, 'quantity': 1})
+            newvalues = { "$set": {"wishlist": wishlist } }
+            update_mongo('wishlist', query, newvalues)
+            
+def remove_from_wishlist(name, item_type, email):
+    
+    query = {"name":name, "type": item_type}
+    item_info = general_mongo_query('productos', query)
+    
+    if item_info:
+        #product found:
+        itemID = item_info[0]["_id"]
+        query = {"email":email}
+        wishlist_data = general_mongo_query('wishlist', query)
+        wishlist = []
+        try:
+            wishlist = wishlist_data[0]['wishlist']
+        except:
+            wishlist_data = None
+        if not wishlist_data:
+            #create a new wishlsit for the user:
+            values_to_insert = {"email": email, "wishlist": []}
+            insert_mongo('wishlist', values_to_insert)
+        item_exists = False
+        #Check for the element id if it is already added:
+        for element in wishlist:
+            print("Looking in wishlist for itemID: ", itemID)
+            if element["product"] == itemID:
+                #item is already in wishlist. We only update this field. 
+                wishlist.remove(element)
+                item_exists = True
+                break
+        if item_exists:
+            newvalues = { "$set": {"wishlist": wishlist } }
+            update_mongo('wishlist', query, newvalues)
+          
 def add_item_to_cart(itemID, quantity, usr):
     #insert_mongo(collection, values_to_insert)
     query = {'email':usr}
