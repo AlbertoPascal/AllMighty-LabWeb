@@ -1,22 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
-html {
-  font-size: 62.5%;
-  box-sizing: border-box;
-}
+
 body,
 #root {
   height: 100vh;
   margin: 0;
 }
-body,
-input,
-select,
-button,
-textarea {
+
+.divProductos{
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+
+.divProductosText{
+  font-size: 1.1rem;
   font-family: Montserrat, Helvetica, Arial, sans-serif;
-  font-size: 1.6rem;
-  
 }
 
 .grid-container {
@@ -28,36 +26,6 @@ textarea {
   grid-template-rows: 5rem 1fr 5rem;
   grid-template-columns: 1fr;
   height: 100%;
-}
-a {
-  text-decoration: none;
-}
-a:hover {
-  color: #ff8000;
-}
-header {
-  grid-area: header;
-  background-color: #203040;
-  color: #ffffff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem;
-}
-header a {
-  color: #ffffff;
-  text-decoration: none;
-}
-main {
-  grid-area: main;
-}
-footer {
-  grid-area: footer;
-  background-color: #203040;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .content {
@@ -87,8 +55,7 @@ footer {
   padding: 1rem;
 }*/
 .product {
-  flex: 0 1 29rem;
-  height: 47rem;
+  flex: 0 1 20rem;
   padding: 1rem;
   display: flex;
   flex-direction: column;

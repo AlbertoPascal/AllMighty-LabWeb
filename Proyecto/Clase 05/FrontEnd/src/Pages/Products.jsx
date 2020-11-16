@@ -40,10 +40,13 @@ class Products extends React.Component {
       });
     }
   }  
+
+  //<footer className="footer">Footer en honor al profe de Desarrollo Web.</footer>
+
   render() {
     return (
-      <div className="grid-container">
-        <main>
+      <div className="grid-container divProductos">
+  
           <div className="content">
             <div className="main">
               <Filter count={this.state.products.length} 
@@ -57,8 +60,7 @@ class Products extends React.Component {
               <Carrito cartItems={this.state.cartItems}/>
             </div>
           </div>
-          </main>
-        <footer className="footer">Footer en honor al profe de Desarrollo Web.</footer>
+
       </div>
       
     );

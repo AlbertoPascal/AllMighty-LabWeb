@@ -43,7 +43,7 @@ export default function App() {
           <Products />
         </Route>
       </Switch>
-
+      
       <SimpleChatBox></SimpleChatBox>
     </Router>
   );

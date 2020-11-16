@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button } from 'react-bootstrap';
 
 export default class Carrito extends React.Component {
     render() {
@@ -6,14 +7,14 @@ export default class Carrito extends React.Component {
         return (
             <div>
                 {cartItems.length === 0 ? (
-                    <div className="cart cart-header">Cart is empty</div>
+                    <div className="cart cart-header divProductosText">Cart is empty</div>
                     ) : (
-                        <div className="cart cart-header">
+                        <div className="cart cart-header divProductosText">
                             You have {cartItems.length} in the cart{" "}
                         </div>
                     )}
                     <div>
-                        <div className = "cart">
+                        <div className = "cart divProductosText">
                             <ul className="cart-items">
                                 {cartItems.map((item) => (
                                         <li key={item.id}>
@@ -25,7 +26,7 @@ export default class Carrito extends React.Component {
                                             <div>{item.description}</div>
                                             <div className="right">
                                                 {item.price} x {item.count} {" "}
-                                                <button onClick={()=>this.props.removeFromCart(item)}> Quitar</button>
+                                                <Button onClick={()=>this.props.removeFromCart(item)} variant="danger"> Quitar</Button>
                                             </div>
                                         </div>
                                         </li>

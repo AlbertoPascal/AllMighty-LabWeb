@@ -17,12 +17,12 @@ import "../styles/Catalogo.css";
                     <Card.Img variant="top" src={item.img} alt={item.name} />
                         <Card.Body>
                             <Card.Title><h2>{item.name}</h2></Card.Title>
-                            <Card.Text>
+                            <Card.Text className="divProductosText">
                                 <p className="product-price">Price: ${item.price}</p>
                                 {item.description} <br/>
                                 tipo: {item.type}
                             </Card.Text>
-                            <button onClick={()=>this.props.addToCart(item)} className="button primary">Comprar</button>
+                            <Button onClick={()=>this.props.addToCart(item)} variant="success divProductosText">Comprar</Button>
                         </Card.Body>
                 </Card>
                 ))}
