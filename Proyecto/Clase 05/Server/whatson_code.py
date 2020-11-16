@@ -149,7 +149,7 @@ def retrieve_mongo_whatsapp_response(msg, usr):
             #We interpret the messge info
             has_quantity, has_type, product = extract_watson_info(entities, usr, msg)
             #query for mongo response
-        if not (intent == "Confirmación"):
+        if not (intent == "Confirmación" or intent == "Email"):
             if bool(product):
                 print("Replacing my product data for: ", product, " because value was ", bool(product))
                 prev_intent_data["product"] = product
@@ -176,12 +176,12 @@ def retrieve_mongo_whatsapp_response(msg, usr):
             format_whatsapp_response(response[0].get('response'),usr)
             
         #Check if we need to add to shopping cart. 
-        if (prev_intent_data["intent"] == r"Confirmación") and bool(prev_intent_data["product"]) and bool(buy_data["type"]) and bool(buy_data["quantity"]) and bool(prev_intent_data["correo"]):
+        if (prev_intent_data["intent"] == r"Confirmación" or prev_intent_data["intent"] == "Email") and bool(prev_intent_data["product"]) and bool(buy_data["type"]) and bool(buy_data["quantity"]) and bool(prev_intent_data["correo"]):
             #We are ready to add to the cart. 
             print("**************************************************")
             print("STARTING TO CHECK FOR COMPLETE PRODUCT INFORMATION")
             #First we find the corresponding product id: 
-            query = {'product': str(prev_intent_data["product"]) , 'type':str(buy_data["type"])}
+            query = {'type': str(prev_intent_data["product"]) , 'name':str(buy_data["type"])}
             print("My query: ", query)
             obj_data = general_mongo_query('productos', query)
             print("--------------------OBJ DATA--------------------")
@@ -208,6 +208,26 @@ def retrieve_mongo_whatsapp_response(msg, usr):
             whatsapp.respond_in_whatsapp("¡Wow! Yo todavía no sé mandar eso :(", usr)
     
     #return response[0].get('response')
+def retrieve_wishlist_products(email):
+    query = {'email':email}
+    final_wishlist = []
+    wishlist_data = general_mongo_query('wishlist', query )
+    if(wishlist_data):
+        #User has a wishlist
+        #print("My wishlist data: ", wishlist_data)
+        for element in wishlist_data[0]["wishlist"]:
+            query = {"_id":element["product"]}
+            product_data = general_mongo_query('productos', query)
+            #print(product_data)
+            #print(element)
+            item = {"id": product_data[0]["id"], "name": product_data[0]["name"], "description": product_data[0]["description"], "img":product_data[0]["img"], "price":product_data[0]["price"], "type": product_data[0]["type"], "count":element["quantity"]}
+            #print("-----adding items: ---------")
+            #print(item)
+            final_wishlist.append(item)
+        return final_wishlist
+    else:
+        #user has no wishlist.
+        return []
 def add_item_to_cart(itemID, quantity, usr):
     #insert_mongo(collection, values_to_insert)
     query = {'email':usr}
@@ -216,7 +236,9 @@ def add_item_to_cart(itemID, quantity, usr):
     try:
         wishlist = obj_data[0]['wishlist']
     except:
+        print("creating new wishlist. ")
         wishlist = []
+        obj_data= None
     item_exists = False
     if not bool(obj_data):
         #create new wishlist for the user

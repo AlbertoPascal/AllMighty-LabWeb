@@ -63,10 +63,15 @@ class WHATSAPP_MESSAGE(Resource):
         
         return jsonify(test_response = "test")
     
-    
+class GET_WISHLIST(Resource):
+    def post(self):
+        print("Fetching wishlist")
+        usr = request.json["user"]
+        products = whatson_code.retrieve_wishlist_products(usr)
+        return jsonify(wishlist = products)
 api.add_resource(GET_MESSAGE, '/getMessage')  # Route_1
 api.add_resource(GET_INTENT, '/getIntent')
 api.add_resource(WHATSAPP_MESSAGE, '/whatsapp_response')
-
+api.add_resource(GET_WISHLIST, '/getWishlist')
 if __name__ == '__main__':
     app.run(port='5002')
