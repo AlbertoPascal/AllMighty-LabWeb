@@ -228,6 +228,23 @@ def retrieve_wishlist_products(email):
     else:
         #user has no wishlist.
         return []
+def retrieve_products():
+    query = {}
+    product_data = general_mongo_query('productos', query )
+    product_list = []
+    if(product_data):
+        #User has a wishlist
+        #print("My wishlist data: ", product_data)
+        for element in product_data:
+            print(element)
+            item = {"id": element["id"], "name": element["name"], "description": element["description"], "img":element["img"], "price":element["price"], "type": element["type"]}
+            product_list.append(item)
+            
+        return product_list   
+       
+    else:
+        #user has no wishlist.
+        return []
 def add_item_to_cart(itemID, quantity, usr):
     #insert_mongo(collection, values_to_insert)
     query = {'email':usr}

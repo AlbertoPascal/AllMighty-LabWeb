@@ -69,9 +69,18 @@ class GET_WISHLIST(Resource):
         usr = request.json["user"]
         products = whatson_code.retrieve_wishlist_products(usr)
         return jsonify(wishlist = products)
+class GET_PRODUCTS(Resource):
+    def post(self):
+        print("Fetching avaliable products")
+        #usr = request.json["user"]
+        products = whatson_code.retrieve_products()
+        print("products remaining: ", products)
+        return jsonify(product_list = products)
+    
 api.add_resource(GET_MESSAGE, '/getMessage')  # Route_1
 api.add_resource(GET_INTENT, '/getIntent')
 api.add_resource(WHATSAPP_MESSAGE, '/whatsapp_response')
 api.add_resource(GET_WISHLIST, '/getWishlist')
+api.add_resource(GET_PRODUCTS, '/getProducts')
 if __name__ == '__main__':
     app.run(port='5002')

@@ -46,19 +46,19 @@ class Products extends React.Component {
   //Fetch all the products from the user's cart from the database
   async fetchWishlist(){
     let usr = localStorage.getItem('user');
-
-    /*let products = await axios.post('http://127.0.0.1:5002/getWishlist', { user: usr} ).then(resp => {
-      console.log("My msg answer was ", resp.data.response);
+    console.log("My user is: ", usr);
+    let products = await axios.post('http://127.0.0.1:5002/getWishlist', { user: usr} ).then(resp => {
+      console.log("My msg answer was ", resp);
       
-      return resp.data.response;
+      return resp.data.wishlist;
 
       })
       .catch(error =>{
         console.log(error);
         return error;
-    });  */
+    });  
 
-    let products = data.products;
+    //let products = data.products;
     
     return await products;
   }
@@ -67,7 +67,7 @@ class Products extends React.Component {
   //Fetch all the products from the database
   async fetchProducts(){
 
-    /*let products = await axios.post('http://127.0.0.1:5002/getProducts').then(resp => {
+    /*let products = await axios.post('http://127.0.0.1:5002/getProducts', { }).then(resp => {
       console.log("My msg answer was ", resp.data.response);
       
       return resp.data.response;
