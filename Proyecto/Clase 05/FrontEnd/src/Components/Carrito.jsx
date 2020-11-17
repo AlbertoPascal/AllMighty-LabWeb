@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button } from 'react-bootstrap';
-import Products from '../Pages/Products';
 
 export default class Carrito extends React.Component {
 

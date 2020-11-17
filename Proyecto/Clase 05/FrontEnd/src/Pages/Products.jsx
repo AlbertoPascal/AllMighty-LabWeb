@@ -4,6 +4,8 @@ import Catalogo from "../Components/Catalogo"
 import Filter from "../Components/Filter";
 import Carrito from "../Components/Carrito";
 import axios from 'axios';
+import { Button } from "react-bootstrap";
+import "../styles/Catalogo.css";
 
 class Products extends React.Component {
   constructor(){
@@ -57,7 +59,7 @@ class Products extends React.Component {
     let usr = localStorage.getItem('user');
 
     //http://127.0.0.1:5002
-    let products = await axios.post('http://127.0.0.1:5002/getWishlist', { user: usr} ).then(resp => {
+    let products = await axios.post('https://481bf7caceab.ngrok.io/getWishlist', { user: usr} ).then(resp => {
       
       return resp.data.wishlist;
 
@@ -92,7 +94,7 @@ class Products extends React.Component {
     let usr = localStorage.getItem('user');
 
     //http://127.0.0.1:5002
-    let products = await axios.post('http://127.0.0.1:5002/getWishlist', { user: usr} ).then(resp => {
+    let products = await axios.post('https://481bf7caceab.ngrok.io/getWishlist', { user: usr} ).then(resp => {
       
       return resp.data.wishlist;
 
@@ -110,7 +112,7 @@ class Products extends React.Component {
   //Fetch all the products from the database
   async fetchProducts(){
 
-    let products = await axios.post('http://127.0.0.1:5002/getProducts', { }).then(resp => {
+    let products = await axios.post('https://481bf7caceab.ngrok.io/getProducts', { }).then(resp => {
       
       return  resp.data.product_list;
 
@@ -130,7 +132,7 @@ class Products extends React.Component {
 
     let usr = localStorage.getItem('user');
 
-    await axios.post('http://127.0.0.1:5002/addProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
+    await axios.post('https://481bf7caceab.ngrok.io/addProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
       
       console.log(resp.data.msg);
 
@@ -149,7 +151,7 @@ class Products extends React.Component {
 
     let usr = localStorage.getItem('user');
 
-    await axios.post('http://127.0.0.1:5002/removeProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
+    await axios.post('https://481bf7caceab.ngrok.io/removeProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
       
       console.log(resp.data.msg);
 
@@ -161,6 +163,28 @@ class Products extends React.Component {
     
     this.updateCarrito();
 
+  }
+
+  //Function to buy all the products in the cart
+  async buy(){
+
+    let usr = localStorage.getItem('user');
+
+    await axios.post('https://481bf7caceab.ngrok.io/buy', { email: usr}).then(resp => {
+      
+      console.log(resp.data.msg);
+      
+      let cartItems = [];
+      this.setState({cartItems});
+      alert("¡Muchas gracias por comprar con nosotros!")
+
+    })
+    .catch(error =>{
+        console.log(error);
+        return error;
+    }); 
+
+    
   }
 
 
@@ -180,6 +204,13 @@ class Products extends React.Component {
   //<footer className="footer">Footer en honor al profe de Desarrollo Web.</footer>
 
   render() {
+
+    let emptyCart = true;
+
+    if(this.state.cartItems.length == 0){
+      emptyCart = false;
+    }
+
     return (
       <div className="grid-container divProductos">
   
@@ -196,12 +227,16 @@ class Products extends React.Component {
             </div>
             <div className="sidebar">
               <Carrito cartItems={this.state.cartItems} removeFromCart={this.removeFromCart} updateCarrito={this.updateCarrito}/>
+
+              {emptyCart ? (<Button variant="success buttonCart" onClick={()=>this.buy()} >Comprar Productos</Button>): (<div></div>)}
+              
             </div>
+            
           </div>
 
       </div>
       
-    );
+    )
   }
 }
 export default Products;

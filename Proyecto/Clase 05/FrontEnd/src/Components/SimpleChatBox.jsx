@@ -1,11 +1,10 @@
 import React from "react";
 import ChatBot from "react-simple-chatbot";
-import { useAuth0 } from '@auth0/auth0-react';
 import { ThemeProvider } from 'styled-components';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import axios from 'axios';
-import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
+import ReactHtmlParser from 'react-html-parser';
 
 const otherFontTheme = {
   background: '#f5f8fb',
@@ -141,7 +140,7 @@ class SimpleChatBox extends React.Component {
         [
           {
             id: '1',
-            message: 'What is your message?',
+            message: 'Hola!, ¿En qué puedo ayudarte?',
             trigger: 'msg',
           },
           {
