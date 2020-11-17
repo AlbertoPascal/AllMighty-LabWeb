@@ -120,7 +120,7 @@ class Review extends React.Component {
         let obj_type = this.state.types[index];
         console.log("For message ", msg, " my type is ", obj_type);
         return (
-          (obj_type == 'Carousel')?(<Carousel>{ReactHtmlParser(msg)}</Carousel>):(<p>{ReactHtmlParser(msg)}</p>)
+          (obj_type == 'Carousel')?(<Carousel showThumbs={false}>{ReactHtmlParser(msg)}</Carousel>):(<p>{ReactHtmlParser(msg)}</p>)
         );
       
       })}

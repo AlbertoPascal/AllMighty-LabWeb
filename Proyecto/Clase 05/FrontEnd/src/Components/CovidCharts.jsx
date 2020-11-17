@@ -44,16 +44,16 @@ const Chart = ({ data: { confirmed, recovered, deaths }, country }) => {
             {
               label: "People",
               backgroundColor: [
-                "rgba(0, 0, 255, 0.5)",
-                "rgba(0, 255, 0, 0.5)",
-                "rgba(255, 0, 0, 0.5)",
-                "rgba(242, 234, 0, 0.5)",
+                "rgba(39, 75, 140, 1)",
+                "rgba(18, 95, 125, 1)",
+                "rgba(17, 125, 124, 1)",
+                "rgba(53, 58, 114, 1)",
               ],
               hoverBackgroundColor: [
-                "rgba(0, 77, 153)",
-                "rgba(30, 102, 49)",
-                "rgba(255, 51, 51)",
-                "rgba(204, 153, 0)",
+                  "rgba(25, 47, 87)",
+                  "rgba(16, 79, 104)",
+                  "rgba(15, 100, 99)",
+                  "rgba(40, 44, 85)",
               ],
               data: [
                 confirmed.value,
