@@ -59,7 +59,11 @@ class Profile extends React.Component {
   render() {
     return (
       <div>
+        <br/>
+        <br/>
         <ProfileInfo/>
+        <br/>
+        <br/>
         <PurchasesProfile desinfectante={this.state.desinfectante} mascaras={this.state.mascaras} pruebas={this.state.pruebas} termometro={this.state.termometro}/>
       </div>
 

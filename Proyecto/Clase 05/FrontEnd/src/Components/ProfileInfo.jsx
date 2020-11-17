@@ -13,22 +13,25 @@ const Info = () => {
       return "Cargando";
   
     return isAuthenticated ? (
-      <div >
-        <br/>
+      
         <Row >
 
-          <Col xl={3} lg={3} md={3} sm={12} xs={12}>
-            <img src={user.picture} alt={user.name} style={{ margin:"auto"}} width="150" height="150"/>
+          <Col xl={4} lg={4} md={4} sm={12} xs={12}>
+            
+          </Col>
+
+          <Col xl={1} lg={1} md={1} sm={12} xs={12}>
+            <img src={user.picture} alt={user.name} style={{ margin:"auto"}} width="100px" height="100px"/>
           </Col>
           
-          <Col xl={9} lg={9} md={9} sm={12} xs={12}>
+          <Col xl={4} lg={4} md={4} sm={12} xs={12}>
             <h1 color="#eee"> {user.name} </h1>
             <p>{user.email}</p>
           </Col>
 
         </Row>
 
-      </div>
+     
     ) : (
       <p>Error. Usuario no autentificado</p>
     );
