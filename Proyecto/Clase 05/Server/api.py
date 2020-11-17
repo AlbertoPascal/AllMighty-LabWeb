@@ -98,6 +98,19 @@ class REMOVE_PRODUCTS(Resource):
         print("products removed")
         return jsonify(msg = "Se quitó el producto del carrito")
 
+class PRUCHASE_PRODUCTS(Resource):
+    def post(self):
+        print("Removing product")
+        email = request.json["email"]
+        whatson_code.complete_purchase(email)
+        return jsonify(msg = "Se completó la compra")
+class TRANSACTION_HISTORY(Resource):
+    def post(self):
+        print("Removing product")
+        email = request.json["email"]
+        usr_transactions = whatson_code.get_transactions(email)
+        return jsonify(transactions = usr_transactions)
+
 api.add_resource(GET_MESSAGE, '/getMessage')  # Route_1
 api.add_resource(GET_INTENT, '/getIntent')
 api.add_resource(WHATSAPP_MESSAGE, '/whatsapp_response')
@@ -105,6 +118,7 @@ api.add_resource(GET_WISHLIST, '/getWishlist')
 api.add_resource(GET_PRODUCTS, '/getProducts')
 api.add_resource(ADD_PRODUCTS, '/addProduct')
 api.add_resource(REMOVE_PRODUCTS, '/removeProduct')
-
+api.add_resource(PRUCHASE_PRODUCTS, '/buy')
+api.add_resource(TRANSACTION_HISTORY, '/buyHistory')
 if __name__ == '__main__':
     app.run(port='5002')
