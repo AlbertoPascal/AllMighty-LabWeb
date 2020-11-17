@@ -41,7 +41,7 @@ class Profile extends React.Component {
     let usr = localStorage.getItem('user');
 
     //http://127.0.0.1:5002
-    let purchases = await axios.post('https://481bf7caceab.ngrok.io/buyHistory', { email: usr} ).then(resp => {
+    let purchases = await axios.post('http://127.0.0.1:5002/buyHistory', { email: usr} ).then(resp => {
       console.log(resp.data.transactions);
 
       return resp.data.transactions;

@@ -59,7 +59,7 @@ class Products extends React.Component {
     let usr = localStorage.getItem('user');
 
     //http://127.0.0.1:5002
-    let products = await axios.post('https://481bf7caceab.ngrok.io/getWishlist', { user: usr} ).then(resp => {
+    let products = await axios.post('http://127.0.0.1:5002/getWishlist', { user: usr} ).then(resp => {
       
       return resp.data.wishlist;
 
@@ -94,7 +94,7 @@ class Products extends React.Component {
     let usr = localStorage.getItem('user');
 
     //http://127.0.0.1:5002
-    let products = await axios.post('https://481bf7caceab.ngrok.io/getWishlist', { user: usr} ).then(resp => {
+    let products = await axios.post('http://127.0.0.1:5002/getWishlist', { user: usr} ).then(resp => {
       
       return resp.data.wishlist;
 
@@ -112,7 +112,7 @@ class Products extends React.Component {
   //Fetch all the products from the database
   async fetchProducts(){
 
-    let products = await axios.post('https://481bf7caceab.ngrok.io/getProducts', { }).then(resp => {
+    let products = await axios.post('http://127.0.0.1:5002/getProducts', { }).then(resp => {
       
       return  resp.data.product_list;
 
@@ -132,7 +132,7 @@ class Products extends React.Component {
 
     let usr = localStorage.getItem('user');
 
-    await axios.post('https://481bf7caceab.ngrok.io/addProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
+    await axios.post('http://127.0.0.1:5002/addProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
       
       console.log(resp.data.msg);
 
@@ -151,7 +151,7 @@ class Products extends React.Component {
 
     let usr = localStorage.getItem('user');
 
-    await axios.post('https://481bf7caceab.ngrok.io/removeProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
+    await axios.post('http://127.0.0.1:5002/removeProduct', { email: usr, name: product.name, type: product.type}).then(resp => {
       
       console.log(resp.data.msg);
 
@@ -170,7 +170,7 @@ class Products extends React.Component {
 
     let usr = localStorage.getItem('user');
 
-    await axios.post('https://481bf7caceab.ngrok.io/buy', { email: usr}).then(resp => {
+    await axios.post('http://127.0.0.1:5002/buy', { email: usr}).then(resp => {
       
       console.log(resp.data.msg);
       
